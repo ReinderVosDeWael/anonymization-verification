@@ -9,6 +9,8 @@ packages = [{include = "anonymization_verification", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+python-docx = "^0.8.11"
+spacy = "^3.6.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.2"
