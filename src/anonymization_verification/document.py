@@ -4,7 +4,7 @@ it contains gendered language or named entities."""
 import json
 import logging
 import pathlib
-from typing import Callable, Iterable
+from typing import Iterable
 
 import docx
 import spacy
@@ -14,6 +14,8 @@ from anonymization_verification import config
 settings = config.get_settings()
 SPACY_MODEL = settings.spacy_model
 LOGGER_NAME = settings.logger_name
+ALLOWED_ENTITIES_FILE = settings.allowed_entities_file
+DISALLOWED_WORDS_FILE = settings.disallowed_words_file
 
 logger = logging.getLogger(LOGGER_NAME)
 logger.setLevel(logging.INFO)
@@ -52,29 +54,16 @@ class AnoynimityVerifier:
             spacy.load(entity_recognition_model) if entity_recognition_model else None
         )
 
-        if allowed_entities:
-            self.allowed_entities = allowed_entities
-        else:
-            with open(
-                settings.allowed_entities_file, "r", encoding="utf-8"
-            ) as file_buffer:
-                self.allowed_entities = json.load(file_buffer)
+        self.allowed_entities = allowed_entities or self._default_allowed_entities()
+        self.disallowed_words = disallowed_words or self._default_disallowed_words()
 
-        if disallowed_words:
-            self.disallowed_words = disallowed_words
-        else:
-            with open(
-                settings.disallowed_words_file, "r", encoding="utf-8"
-            ) as file_buffer:
-                self.disallowed_words = json.load(file_buffer)
-
-    def contains_any_disallowed(self) -> bool:
+    def contains_any_disallowed(self) -> set[str]:
         """Check if the document passes all checks.
 
         Returns:
-            True if the document passes all checks, False otherwise.
+            The words that are not allowed.
         """
-        return self.find_disallowed_words() or self.find_named_entities()
+        return self.find_disallowed_words() | self.find_named_entities()
 
     def find_disallowed_words(self) -> set[str]:
         """Check if the document contains disallowed words.
@@ -85,9 +74,6 @@ class AnoynimityVerifier:
         disallowed = {
             word for word in self.text.split() if word.lower() in self.disallowed_words
         }
-
-        if disallowed:
-            logger.info("Disallowed words:\n%s", "\n".join(disallowed))
 
         return disallowed
 
@@ -106,9 +92,17 @@ class AnoynimityVerifier:
         entities = {entity.text for entity in doc.ents}
         disallowed = entities - set(self.allowed_entities)
 
-        if disallowed:
-            logger.info("Disallowed named entities:\n%s", "\n".join(disallowed))
         return disallowed
+
+    @staticmethod
+    def _default_allowed_entities() -> set[str]:
+        with open(ALLOWED_ENTITIES_FILE, "r", encoding="utf-8") as file_buffer:
+            return set(json.load(file_buffer))
+
+    @staticmethod
+    def _default_disallowed_words() -> set[str]:
+        with open(DISALLOWED_WORDS_FILE, "r", encoding="utf-8") as file_buffer:
+            return set(json.load(file_buffer))
 
 
 class WordDocument(AnoynimityVerifier):

@@ -40,11 +40,11 @@ def word_document(word_text: list[str]) -> Generator[str, None, None]:
         [["First sentence allowed", "Himself second is not"], {"Himself"}],
     ],
 )
-def test_check_disallowed_words(word_document: str, expected: bool) -> None:
+def test_check_disallowed_words(word_document: str, expected: set[str]) -> None:
     """Test the check_disallowed_words method."""
-    word_document = document.WordDocument(word_document, None)
+    doc = document.WordDocument(word_document, None)
 
-    assert word_document.find_disallowed_words() == expected
+    assert doc.find_disallowed_words() == expected
 
 
 @pytest.mark.parametrize(
@@ -57,8 +57,8 @@ def test_check_disallowed_words(word_document: str, expected: bool) -> None:
         [["Child Mind Institute is allowed"], set()],
     ],
 )
-def test_check_named_entities(word_document: str, expected: bool) -> None:
+def test_check_named_entities(word_document: str, expected: set[str]) -> None:
     """Test the check_named_entities method."""
-    word_document = document.WordDocument(word_document, "en_core_web_sm")
+    doc = document.WordDocument(word_document, "en_core_web_sm")
 
-    assert word_document.find_named_entities() == expected
+    assert doc.find_named_entities() == expected
