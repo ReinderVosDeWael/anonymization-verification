@@ -32,16 +32,33 @@ def word_document(word_text: list[str]) -> Generator[str, None, None]:
 @pytest.mark.parametrize(
     "word_text, expected",
     [
-        [["This is a test."], True],
-        [["He/she/they is allowed."], True],
-        [["He is a pronoun."], False],
-        [["Mr. is not allowed"], False],
-        [["Ms. is not allowed"], False],
-        [["First sentence allowed", "Himself second is not"], False],
+        [["This is a test."], False],
+        [["He/she/they is allowed."], False],
+        [["He is a pronoun."], True],
+        [["Mr. is not allowed"], True],
+        [["Ms. is not allowed"], True],
+        [["First sentence allowed", "Himself second is not"], True],
     ],
 )
 def test_check_disallowed_words(word_document: str, expected: bool) -> None:
     """Test the check_disallowed_words method."""
-    word_document = document.WordDocument(word_document)
+    word_document = document.WordDocument(word_document, None)
 
-    assert word_document.check_disallowed_words() == expected
+    assert word_document.contains_disallowed_words() == expected
+
+
+@pytest.mark.parametrize(
+    "word_text, expected",
+    [
+        [["This is a test."], False],
+        [["He/she/they is allowed."], False],
+        [["Mcdonalds is not allowed"], True],
+        [["First sentence allowed", "Sir, this is a Wendy's"], True],
+        [["Child Mind Institute is allowed"], False],
+    ],
+)
+def test_check_named_entities(word_document: str, expected: bool) -> None:
+    """Test the check_named_entities method."""
+    word_document = document.WordDocument(word_document, "en_core_web_sm")
+
+    assert word_document.contains_named_entities() == expected
