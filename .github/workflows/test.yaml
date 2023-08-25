@@ -28,14 +28,14 @@ jobs:
                 --cov=src tests \
               );
           exit_status=$?;
-          echo "$test_output" > pytest-coverage.txt;
+          echo "$test_output" > ./pytest-coverage.txt;
           exit $exit_status
       - name: Upload pytest coverage artifacts.
         if: success() || failure()
         uses: actions/upload-artifact@v2
         with:
           name: pytest-coverage
-          path: pytest-coverage.txt
+          path: ./pytest-coverage.txt
       - name: Upload pytest junitxml artifacts.
         if: success() || failure()
         uses: actions/upload-artifact@v2
@@ -60,7 +60,7 @@ jobs:
         with:
           name: pytest-junitxml
       - name: Pytest coverage comment
-        if: (success() || failure()) && github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request'
         uses: MishaKav/pytest-coverage-comment@main
         with:
           pytest-coverage-path: ./pytest-coverage.txt
