@@ -55,31 +55,31 @@
                     <a class="variable" href="#ch">ch</a>
             </li>
             <li>
-                    <a class="class" href="#AnoynimityVerifier">AnoynimityVerifier</a>
+                    <a class="class" href="#AnonyimityVerifier">AnonyimityVerifier</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#AnoynimityVerifier.__init__">AnoynimityVerifier</a>
+                                <a class="function" href="#AnonyimityVerifier.__init__">AnonyimityVerifier</a>
                         </li>
                         <li>
-                                <a class="variable" href="#AnoynimityVerifier.text">text</a>
+                                <a class="variable" href="#AnonyimityVerifier.text">text</a>
                         </li>
                         <li>
-                                <a class="variable" href="#AnoynimityVerifier.entity_recognition_model">entity_recognition_model</a>
+                                <a class="variable" href="#AnonyimityVerifier.entity_recognition_model">entity_recognition_model</a>
                         </li>
                         <li>
-                                <a class="variable" href="#AnoynimityVerifier.allowed_entities">allowed_entities</a>
+                                <a class="variable" href="#AnonyimityVerifier.allowed_entities">allowed_entities</a>
                         </li>
                         <li>
-                                <a class="variable" href="#AnoynimityVerifier.disallowed_words">disallowed_words</a>
+                                <a class="variable" href="#AnonyimityVerifier.disallowed_words">disallowed_words</a>
                         </li>
                         <li>
-                                <a class="function" href="#AnoynimityVerifier.contains_any_disallowed">contains_any_disallowed</a>
+                                <a class="function" href="#AnonyimityVerifier.find_any_disallowed">find_any_disallowed</a>
                         </li>
                         <li>
-                                <a class="function" href="#AnoynimityVerifier.find_disallowed_words">find_disallowed_words</a>
+                                <a class="function" href="#AnonyimityVerifier.find_disallowed_words">find_disallowed_words</a>
                         </li>
                         <li>
-                                <a class="function" href="#AnoynimityVerifier.find_named_entities">find_named_entities</a>
+                                <a class="function" href="#AnonyimityVerifier.find_named_entities">find_named_entities</a>
                         </li>
                 </ul>
 
@@ -150,7 +150,7 @@ it contains gendered language or named entities.</p>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="k">class</span> <span class="nc">AnoynimityVerifier</span><span class="p">:</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="k">class</span> <span class="nc">AnonyimityVerifier</span><span class="p">:</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for verifying anonymity of (an iterable of) string(s).</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">    Attributes:</span>
@@ -182,7 +182,7 @@ it contains gendered language or named entities.</p>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span> <span class="o">=</span> <span class="n">allowed_entities</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_allowed_entities</span><span class="p">()</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span> <span class="o">=</span> <span class="n">disallowed_words</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_disallowed_words</span><span class="p">()</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="k">def</span> <span class="nf">contains_any_disallowed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="k">def</span> <span class="nf">find_any_disallowed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document passes all checks.</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">        Returns:</span>
@@ -230,9 +230,9 @@ it contains gendered language or named entities.</p>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
 </span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="k">class</span> <span class="nc">WordDocument</span><span class="p">(</span><span class="n">AnoynimityVerifier</span><span class="p">):</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="k">class</span> <span class="nc">WordDocument</span><span class="p">(</span><span class="n">AnonyimityVerifier</span><span class="p">):</span>
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a Word document that can be used to verify the anonymity of its contents.</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">    Inherits from `AnoynimityVerifier`.</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">    Inherits from `AnonyimityVerifier`.</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">    Args:</span>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        filename: The path to the Word document file.</span>
@@ -365,95 +365,95 @@ it contains gendered language or named entities.</p>
     
 
                 </section>
-                <section id="AnoynimityVerifier">
-                            <input id="AnoynimityVerifier-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                <section id="AnonyimityVerifier">
+                            <input id="AnonyimityVerifier-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">AnoynimityVerifier</span>:
+    <span class="name">AnonyimityVerifier</span>:
 
-                <label class="view-source-button" for="AnoynimityVerifier-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="AnonyimityVerifier-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#AnoynimityVerifier"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AnoynimityVerifier-29"><a href="#AnoynimityVerifier-29"><span class="linenos"> 29</span></a><span class="k">class</span> <span class="nc">AnoynimityVerifier</span><span class="p">:</span>
-</span><span id="AnoynimityVerifier-30"><a href="#AnoynimityVerifier-30"><span class="linenos"> 30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for verifying anonymity of (an iterable of) string(s).</span>
-</span><span id="AnoynimityVerifier-31"><a href="#AnoynimityVerifier-31"><span class="linenos"> 31</span></a>
-</span><span id="AnoynimityVerifier-32"><a href="#AnoynimityVerifier-32"><span class="linenos"> 32</span></a><span class="sd">    Attributes:</span>
-</span><span id="AnoynimityVerifier-33"><a href="#AnoynimityVerifier-33"><span class="linenos"> 33</span></a><span class="sd">        text: An iterable of strings or a string.</span>
-</span><span id="AnoynimityVerifier-34"><a href="#AnoynimityVerifier-34"><span class="linenos"> 34</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="AnoynimityVerifier-35"><a href="#AnoynimityVerifier-35"><span class="linenos"> 35</span></a>
-</span><span id="AnoynimityVerifier-36"><a href="#AnoynimityVerifier-36"><span class="linenos"> 36</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-</span><span id="AnoynimityVerifier-37"><a href="#AnoynimityVerifier-37"><span class="linenos"> 37</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="AnoynimityVerifier-38"><a href="#AnoynimityVerifier-38"><span class="linenos"> 38</span></a>        <span class="n">text</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-</span><span id="AnoynimityVerifier-39"><a href="#AnoynimityVerifier-39"><span class="linenos"> 39</span></a>        <span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">SPACY_MODEL</span><span class="p">,</span>
-</span><span id="AnoynimityVerifier-40"><a href="#AnoynimityVerifier-40"><span class="linenos"> 40</span></a>        <span class="n">disallowed_words</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="AnoynimityVerifier-41"><a href="#AnoynimityVerifier-41"><span class="linenos"> 41</span></a>        <span class="n">allowed_entities</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="AnoynimityVerifier-42"><a href="#AnoynimityVerifier-42"><span class="linenos"> 42</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AnoynimityVerifier-43"><a href="#AnoynimityVerifier-43"><span class="linenos"> 43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the AnoynimityVerifier object.</span>
-</span><span id="AnoynimityVerifier-44"><a href="#AnoynimityVerifier-44"><span class="linenos"> 44</span></a>
-</span><span id="AnoynimityVerifier-45"><a href="#AnoynimityVerifier-45"><span class="linenos"> 45</span></a><span class="sd">        Args:</span>
-</span><span id="AnoynimityVerifier-46"><a href="#AnoynimityVerifier-46"><span class="linenos"> 46</span></a><span class="sd">            text: An iterable of strings or a string.</span>
-</span><span id="AnoynimityVerifier-47"><a href="#AnoynimityVerifier-47"><span class="linenos"> 47</span></a><span class="sd">            entity_recognition_model: The name of the spaCy model to use for named entity recognition.</span>
-</span><span id="AnoynimityVerifier-48"><a href="#AnoynimityVerifier-48"><span class="linenos"> 48</span></a><span class="sd">                If None, no model is loaded.</span>
-</span><span id="AnoynimityVerifier-49"><a href="#AnoynimityVerifier-49"><span class="linenos"> 49</span></a><span class="sd">            disallowed_words: An iterable of disallowed words. If None, the default list is used.</span>
-</span><span id="AnoynimityVerifier-50"><a href="#AnoynimityVerifier-50"><span class="linenos"> 50</span></a><span class="sd">            allowed_entities: An iterable of allowed named entities. If None, the default list is used.</span>
-</span><span id="AnoynimityVerifier-51"><a href="#AnoynimityVerifier-51"><span class="linenos"> 51</span></a>
-</span><span id="AnoynimityVerifier-52"><a href="#AnoynimityVerifier-52"><span class="linenos"> 52</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnoynimityVerifier-53"><a href="#AnoynimityVerifier-53"><span class="linenos"> 53</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-</span><span id="AnoynimityVerifier-54"><a href="#AnoynimityVerifier-54"><span class="linenos"> 54</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="AnoynimityVerifier-55"><a href="#AnoynimityVerifier-55"><span class="linenos"> 55</span></a>            <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">entity_recognition_model</span><span class="p">)</span> <span class="k">if</span> <span class="n">entity_recognition_model</span> <span class="k">else</span> <span class="kc">None</span>
-</span><span id="AnoynimityVerifier-56"><a href="#AnoynimityVerifier-56"><span class="linenos"> 56</span></a>        <span class="p">)</span>
-</span><span id="AnoynimityVerifier-57"><a href="#AnoynimityVerifier-57"><span class="linenos"> 57</span></a>
-</span><span id="AnoynimityVerifier-58"><a href="#AnoynimityVerifier-58"><span class="linenos"> 58</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span> <span class="o">=</span> <span class="n">allowed_entities</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_allowed_entities</span><span class="p">()</span>
-</span><span id="AnoynimityVerifier-59"><a href="#AnoynimityVerifier-59"><span class="linenos"> 59</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span> <span class="o">=</span> <span class="n">disallowed_words</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_disallowed_words</span><span class="p">()</span>
-</span><span id="AnoynimityVerifier-60"><a href="#AnoynimityVerifier-60"><span class="linenos"> 60</span></a>
-</span><span id="AnoynimityVerifier-61"><a href="#AnoynimityVerifier-61"><span class="linenos"> 61</span></a>    <span class="k">def</span> <span class="nf">contains_any_disallowed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnoynimityVerifier-62"><a href="#AnoynimityVerifier-62"><span class="linenos"> 62</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document passes all checks.</span>
-</span><span id="AnoynimityVerifier-63"><a href="#AnoynimityVerifier-63"><span class="linenos"> 63</span></a>
-</span><span id="AnoynimityVerifier-64"><a href="#AnoynimityVerifier-64"><span class="linenos"> 64</span></a><span class="sd">        Returns:</span>
-</span><span id="AnoynimityVerifier-65"><a href="#AnoynimityVerifier-65"><span class="linenos"> 65</span></a><span class="sd">            The words that are not allowed.</span>
-</span><span id="AnoynimityVerifier-66"><a href="#AnoynimityVerifier-66"><span class="linenos"> 66</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnoynimityVerifier-67"><a href="#AnoynimityVerifier-67"><span class="linenos"> 67</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_disallowed_words</span><span class="p">()</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_named_entities</span><span class="p">()</span>
-</span><span id="AnoynimityVerifier-68"><a href="#AnoynimityVerifier-68"><span class="linenos"> 68</span></a>
-</span><span id="AnoynimityVerifier-69"><a href="#AnoynimityVerifier-69"><span class="linenos"> 69</span></a>    <span class="k">def</span> <span class="nf">find_disallowed_words</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnoynimityVerifier-70"><a href="#AnoynimityVerifier-70"><span class="linenos"> 70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains disallowed words.</span>
-</span><span id="AnoynimityVerifier-71"><a href="#AnoynimityVerifier-71"><span class="linenos"> 71</span></a>
-</span><span id="AnoynimityVerifier-72"><a href="#AnoynimityVerifier-72"><span class="linenos"> 72</span></a><span class="sd">        Returns:</span>
-</span><span id="AnoynimityVerifier-73"><a href="#AnoynimityVerifier-73"><span class="linenos"> 73</span></a><span class="sd">            True if the document contains disallowed words, False otherwise.</span>
-</span><span id="AnoynimityVerifier-74"><a href="#AnoynimityVerifier-74"><span class="linenos"> 74</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnoynimityVerifier-75"><a href="#AnoynimityVerifier-75"><span class="linenos"> 75</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="AnoynimityVerifier-76"><a href="#AnoynimityVerifier-76"><span class="linenos"> 76</span></a>            <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span>
-</span><span id="AnoynimityVerifier-77"><a href="#AnoynimityVerifier-77"><span class="linenos"> 77</span></a>        <span class="p">}</span>
-</span><span id="AnoynimityVerifier-78"><a href="#AnoynimityVerifier-78"><span class="linenos"> 78</span></a>
-</span><span id="AnoynimityVerifier-79"><a href="#AnoynimityVerifier-79"><span class="linenos"> 79</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
-</span><span id="AnoynimityVerifier-80"><a href="#AnoynimityVerifier-80"><span class="linenos"> 80</span></a>
-</span><span id="AnoynimityVerifier-81"><a href="#AnoynimityVerifier-81"><span class="linenos"> 81</span></a>    <span class="k">def</span> <span class="nf">find_named_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnoynimityVerifier-82"><a href="#AnoynimityVerifier-82"><span class="linenos"> 82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find name entities in the document.</span>
-</span><span id="AnoynimityVerifier-83"><a href="#AnoynimityVerifier-83"><span class="linenos"> 83</span></a>
-</span><span id="AnoynimityVerifier-84"><a href="#AnoynimityVerifier-84"><span class="linenos"> 84</span></a><span class="sd">        Returns:</span>
-</span><span id="AnoynimityVerifier-85"><a href="#AnoynimityVerifier-85"><span class="linenos"> 85</span></a><span class="sd">            The detected named entities.</span>
-</span><span id="AnoynimityVerifier-86"><a href="#AnoynimityVerifier-86"><span class="linenos"> 86</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnoynimityVerifier-87"><a href="#AnoynimityVerifier-87"><span class="linenos"> 87</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">:</span>
-</span><span id="AnoynimityVerifier-88"><a href="#AnoynimityVerifier-88"><span class="linenos"> 88</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="AnoynimityVerifier-89"><a href="#AnoynimityVerifier-89"><span class="linenos"> 89</span></a>                <span class="s2">&quot;No spaCy model loaded. Please provide a spaCy model name to the constructor.&quot;</span>
-</span><span id="AnoynimityVerifier-90"><a href="#AnoynimityVerifier-90"><span class="linenos"> 90</span></a>            <span class="p">)</span>
-</span><span id="AnoynimityVerifier-91"><a href="#AnoynimityVerifier-91"><span class="linenos"> 91</span></a>
-</span><span id="AnoynimityVerifier-92"><a href="#AnoynimityVerifier-92"><span class="linenos"> 92</span></a>        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</span><span id="AnoynimityVerifier-93"><a href="#AnoynimityVerifier-93"><span class="linenos"> 93</span></a>        <span class="n">entities</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">}</span>
-</span><span id="AnoynimityVerifier-94"><a href="#AnoynimityVerifier-94"><span class="linenos"> 94</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="n">entities</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span><span class="p">)</span>
-</span><span id="AnoynimityVerifier-95"><a href="#AnoynimityVerifier-95"><span class="linenos"> 95</span></a>
-</span><span id="AnoynimityVerifier-96"><a href="#AnoynimityVerifier-96"><span class="linenos"> 96</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
-</span><span id="AnoynimityVerifier-97"><a href="#AnoynimityVerifier-97"><span class="linenos"> 97</span></a>
-</span><span id="AnoynimityVerifier-98"><a href="#AnoynimityVerifier-98"><span class="linenos"> 98</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="AnoynimityVerifier-99"><a href="#AnoynimityVerifier-99"><span class="linenos"> 99</span></a>    <span class="k">def</span> <span class="nf">_default_allowed_entities</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnoynimityVerifier-100"><a href="#AnoynimityVerifier-100"><span class="linenos">100</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ALLOWED_ENTITIES_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
-</span><span id="AnoynimityVerifier-101"><a href="#AnoynimityVerifier-101"><span class="linenos">101</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
-</span><span id="AnoynimityVerifier-102"><a href="#AnoynimityVerifier-102"><span class="linenos">102</span></a>
-</span><span id="AnoynimityVerifier-103"><a href="#AnoynimityVerifier-103"><span class="linenos">103</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="AnoynimityVerifier-104"><a href="#AnoynimityVerifier-104"><span class="linenos">104</span></a>    <span class="k">def</span> <span class="nf">_default_disallowed_words</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnoynimityVerifier-105"><a href="#AnoynimityVerifier-105"><span class="linenos">105</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DISALLOWED_WORDS_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
-</span><span id="AnoynimityVerifier-106"><a href="#AnoynimityVerifier-106"><span class="linenos">106</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
+    <a class="headerlink" href="#AnonyimityVerifier"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AnonyimityVerifier-29"><a href="#AnonyimityVerifier-29"><span class="linenos"> 29</span></a><span class="k">class</span> <span class="nc">AnonyimityVerifier</span><span class="p">:</span>
+</span><span id="AnonyimityVerifier-30"><a href="#AnonyimityVerifier-30"><span class="linenos"> 30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for verifying anonymity of (an iterable of) string(s).</span>
+</span><span id="AnonyimityVerifier-31"><a href="#AnonyimityVerifier-31"><span class="linenos"> 31</span></a>
+</span><span id="AnonyimityVerifier-32"><a href="#AnonyimityVerifier-32"><span class="linenos"> 32</span></a><span class="sd">    Attributes:</span>
+</span><span id="AnonyimityVerifier-33"><a href="#AnonyimityVerifier-33"><span class="linenos"> 33</span></a><span class="sd">        text: An iterable of strings or a string.</span>
+</span><span id="AnonyimityVerifier-34"><a href="#AnonyimityVerifier-34"><span class="linenos"> 34</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier-35"><a href="#AnonyimityVerifier-35"><span class="linenos"> 35</span></a>
+</span><span id="AnonyimityVerifier-36"><a href="#AnonyimityVerifier-36"><span class="linenos"> 36</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="AnonyimityVerifier-37"><a href="#AnonyimityVerifier-37"><span class="linenos"> 37</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="AnonyimityVerifier-38"><a href="#AnonyimityVerifier-38"><span class="linenos"> 38</span></a>        <span class="n">text</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+</span><span id="AnonyimityVerifier-39"><a href="#AnonyimityVerifier-39"><span class="linenos"> 39</span></a>        <span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">SPACY_MODEL</span><span class="p">,</span>
+</span><span id="AnonyimityVerifier-40"><a href="#AnonyimityVerifier-40"><span class="linenos"> 40</span></a>        <span class="n">disallowed_words</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="AnonyimityVerifier-41"><a href="#AnonyimityVerifier-41"><span class="linenos"> 41</span></a>        <span class="n">allowed_entities</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="AnonyimityVerifier-42"><a href="#AnonyimityVerifier-42"><span class="linenos"> 42</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AnonyimityVerifier-43"><a href="#AnonyimityVerifier-43"><span class="linenos"> 43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the AnoynimityVerifier object.</span>
+</span><span id="AnonyimityVerifier-44"><a href="#AnonyimityVerifier-44"><span class="linenos"> 44</span></a>
+</span><span id="AnonyimityVerifier-45"><a href="#AnonyimityVerifier-45"><span class="linenos"> 45</span></a><span class="sd">        Args:</span>
+</span><span id="AnonyimityVerifier-46"><a href="#AnonyimityVerifier-46"><span class="linenos"> 46</span></a><span class="sd">            text: An iterable of strings or a string.</span>
+</span><span id="AnonyimityVerifier-47"><a href="#AnonyimityVerifier-47"><span class="linenos"> 47</span></a><span class="sd">            entity_recognition_model: The name of the spaCy model to use for named entity recognition.</span>
+</span><span id="AnonyimityVerifier-48"><a href="#AnonyimityVerifier-48"><span class="linenos"> 48</span></a><span class="sd">                If None, no model is loaded.</span>
+</span><span id="AnonyimityVerifier-49"><a href="#AnonyimityVerifier-49"><span class="linenos"> 49</span></a><span class="sd">            disallowed_words: An iterable of disallowed words. If None, the default list is used.</span>
+</span><span id="AnonyimityVerifier-50"><a href="#AnonyimityVerifier-50"><span class="linenos"> 50</span></a><span class="sd">            allowed_entities: An iterable of allowed named entities. If None, the default list is used.</span>
+</span><span id="AnonyimityVerifier-51"><a href="#AnonyimityVerifier-51"><span class="linenos"> 51</span></a>
+</span><span id="AnonyimityVerifier-52"><a href="#AnonyimityVerifier-52"><span class="linenos"> 52</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier-53"><a href="#AnonyimityVerifier-53"><span class="linenos"> 53</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span><span id="AnonyimityVerifier-54"><a href="#AnonyimityVerifier-54"><span class="linenos"> 54</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="AnonyimityVerifier-55"><a href="#AnonyimityVerifier-55"><span class="linenos"> 55</span></a>            <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">entity_recognition_model</span><span class="p">)</span> <span class="k">if</span> <span class="n">entity_recognition_model</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span id="AnonyimityVerifier-56"><a href="#AnonyimityVerifier-56"><span class="linenos"> 56</span></a>        <span class="p">)</span>
+</span><span id="AnonyimityVerifier-57"><a href="#AnonyimityVerifier-57"><span class="linenos"> 57</span></a>
+</span><span id="AnonyimityVerifier-58"><a href="#AnonyimityVerifier-58"><span class="linenos"> 58</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span> <span class="o">=</span> <span class="n">allowed_entities</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_allowed_entities</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier-59"><a href="#AnonyimityVerifier-59"><span class="linenos"> 59</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span> <span class="o">=</span> <span class="n">disallowed_words</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_disallowed_words</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier-60"><a href="#AnonyimityVerifier-60"><span class="linenos"> 60</span></a>
+</span><span id="AnonyimityVerifier-61"><a href="#AnonyimityVerifier-61"><span class="linenos"> 61</span></a>    <span class="k">def</span> <span class="nf">find_any_disallowed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier-62"><a href="#AnonyimityVerifier-62"><span class="linenos"> 62</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document passes all checks.</span>
+</span><span id="AnonyimityVerifier-63"><a href="#AnonyimityVerifier-63"><span class="linenos"> 63</span></a>
+</span><span id="AnonyimityVerifier-64"><a href="#AnonyimityVerifier-64"><span class="linenos"> 64</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier-65"><a href="#AnonyimityVerifier-65"><span class="linenos"> 65</span></a><span class="sd">            The words that are not allowed.</span>
+</span><span id="AnonyimityVerifier-66"><a href="#AnonyimityVerifier-66"><span class="linenos"> 66</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier-67"><a href="#AnonyimityVerifier-67"><span class="linenos"> 67</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_disallowed_words</span><span class="p">()</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_named_entities</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier-68"><a href="#AnonyimityVerifier-68"><span class="linenos"> 68</span></a>
+</span><span id="AnonyimityVerifier-69"><a href="#AnonyimityVerifier-69"><span class="linenos"> 69</span></a>    <span class="k">def</span> <span class="nf">find_disallowed_words</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier-70"><a href="#AnonyimityVerifier-70"><span class="linenos"> 70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains disallowed words.</span>
+</span><span id="AnonyimityVerifier-71"><a href="#AnonyimityVerifier-71"><span class="linenos"> 71</span></a>
+</span><span id="AnonyimityVerifier-72"><a href="#AnonyimityVerifier-72"><span class="linenos"> 72</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier-73"><a href="#AnonyimityVerifier-73"><span class="linenos"> 73</span></a><span class="sd">            True if the document contains disallowed words, False otherwise.</span>
+</span><span id="AnonyimityVerifier-74"><a href="#AnonyimityVerifier-74"><span class="linenos"> 74</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier-75"><a href="#AnonyimityVerifier-75"><span class="linenos"> 75</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="AnonyimityVerifier-76"><a href="#AnonyimityVerifier-76"><span class="linenos"> 76</span></a>            <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span>
+</span><span id="AnonyimityVerifier-77"><a href="#AnonyimityVerifier-77"><span class="linenos"> 77</span></a>        <span class="p">}</span>
+</span><span id="AnonyimityVerifier-78"><a href="#AnonyimityVerifier-78"><span class="linenos"> 78</span></a>
+</span><span id="AnonyimityVerifier-79"><a href="#AnonyimityVerifier-79"><span class="linenos"> 79</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
+</span><span id="AnonyimityVerifier-80"><a href="#AnonyimityVerifier-80"><span class="linenos"> 80</span></a>
+</span><span id="AnonyimityVerifier-81"><a href="#AnonyimityVerifier-81"><span class="linenos"> 81</span></a>    <span class="k">def</span> <span class="nf">find_named_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier-82"><a href="#AnonyimityVerifier-82"><span class="linenos"> 82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find name entities in the document.</span>
+</span><span id="AnonyimityVerifier-83"><a href="#AnonyimityVerifier-83"><span class="linenos"> 83</span></a>
+</span><span id="AnonyimityVerifier-84"><a href="#AnonyimityVerifier-84"><span class="linenos"> 84</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier-85"><a href="#AnonyimityVerifier-85"><span class="linenos"> 85</span></a><span class="sd">            The detected named entities.</span>
+</span><span id="AnonyimityVerifier-86"><a href="#AnonyimityVerifier-86"><span class="linenos"> 86</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier-87"><a href="#AnonyimityVerifier-87"><span class="linenos"> 87</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">:</span>
+</span><span id="AnonyimityVerifier-88"><a href="#AnonyimityVerifier-88"><span class="linenos"> 88</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="AnonyimityVerifier-89"><a href="#AnonyimityVerifier-89"><span class="linenos"> 89</span></a>                <span class="s2">&quot;No spaCy model loaded. Please provide a spaCy model name to the constructor.&quot;</span>
+</span><span id="AnonyimityVerifier-90"><a href="#AnonyimityVerifier-90"><span class="linenos"> 90</span></a>            <span class="p">)</span>
+</span><span id="AnonyimityVerifier-91"><a href="#AnonyimityVerifier-91"><span class="linenos"> 91</span></a>
+</span><span id="AnonyimityVerifier-92"><a href="#AnonyimityVerifier-92"><span class="linenos"> 92</span></a>        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span><span id="AnonyimityVerifier-93"><a href="#AnonyimityVerifier-93"><span class="linenos"> 93</span></a>        <span class="n">entities</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">}</span>
+</span><span id="AnonyimityVerifier-94"><a href="#AnonyimityVerifier-94"><span class="linenos"> 94</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="n">entities</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span><span class="p">)</span>
+</span><span id="AnonyimityVerifier-95"><a href="#AnonyimityVerifier-95"><span class="linenos"> 95</span></a>
+</span><span id="AnonyimityVerifier-96"><a href="#AnonyimityVerifier-96"><span class="linenos"> 96</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
+</span><span id="AnonyimityVerifier-97"><a href="#AnonyimityVerifier-97"><span class="linenos"> 97</span></a>
+</span><span id="AnonyimityVerifier-98"><a href="#AnonyimityVerifier-98"><span class="linenos"> 98</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="AnonyimityVerifier-99"><a href="#AnonyimityVerifier-99"><span class="linenos"> 99</span></a>    <span class="k">def</span> <span class="nf">_default_allowed_entities</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier-100"><a href="#AnonyimityVerifier-100"><span class="linenos">100</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ALLOWED_ENTITIES_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
+</span><span id="AnonyimityVerifier-101"><a href="#AnonyimityVerifier-101"><span class="linenos">101</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
+</span><span id="AnonyimityVerifier-102"><a href="#AnonyimityVerifier-102"><span class="linenos">102</span></a>
+</span><span id="AnonyimityVerifier-103"><a href="#AnonyimityVerifier-103"><span class="linenos">103</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="AnonyimityVerifier-104"><a href="#AnonyimityVerifier-104"><span class="linenos">104</span></a>    <span class="k">def</span> <span class="nf">_default_disallowed_words</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier-105"><a href="#AnonyimityVerifier-105"><span class="linenos">105</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DISALLOWED_WORDS_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
+</span><span id="AnonyimityVerifier-106"><a href="#AnonyimityVerifier-106"><span class="linenos">106</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -467,40 +467,40 @@ it contains gendered language or named entities.</p>
 </div>
 
 
-                            <div id="AnoynimityVerifier.__init__" class="classattr">
-                                        <input id="AnoynimityVerifier.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="AnonyimityVerifier.__init__" class="classattr">
+                                        <input id="AnonyimityVerifier.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">AnoynimityVerifier</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">text</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s1">&#39;en_core_web_trf&#39;</span>,</span><span class="param">	<span class="n">disallowed_words</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">allowed_entities</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+        <span class="name">AnonyimityVerifier</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">text</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s1">&#39;en_core_web_trf&#39;</span>,</span><span class="param">	<span class="n">disallowed_words</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">allowed_entities</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
 
-                <label class="view-source-button" for="AnoynimityVerifier.__init__-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="AnonyimityVerifier.__init__-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#AnoynimityVerifier.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AnoynimityVerifier.__init__-36"><a href="#AnoynimityVerifier.__init__-36"><span class="linenos">36</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-</span><span id="AnoynimityVerifier.__init__-37"><a href="#AnoynimityVerifier.__init__-37"><span class="linenos">37</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="AnoynimityVerifier.__init__-38"><a href="#AnoynimityVerifier.__init__-38"><span class="linenos">38</span></a>        <span class="n">text</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-</span><span id="AnoynimityVerifier.__init__-39"><a href="#AnoynimityVerifier.__init__-39"><span class="linenos">39</span></a>        <span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">SPACY_MODEL</span><span class="p">,</span>
-</span><span id="AnoynimityVerifier.__init__-40"><a href="#AnoynimityVerifier.__init__-40"><span class="linenos">40</span></a>        <span class="n">disallowed_words</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="AnoynimityVerifier.__init__-41"><a href="#AnoynimityVerifier.__init__-41"><span class="linenos">41</span></a>        <span class="n">allowed_entities</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="AnoynimityVerifier.__init__-42"><a href="#AnoynimityVerifier.__init__-42"><span class="linenos">42</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AnoynimityVerifier.__init__-43"><a href="#AnoynimityVerifier.__init__-43"><span class="linenos">43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the AnoynimityVerifier object.</span>
-</span><span id="AnoynimityVerifier.__init__-44"><a href="#AnoynimityVerifier.__init__-44"><span class="linenos">44</span></a>
-</span><span id="AnoynimityVerifier.__init__-45"><a href="#AnoynimityVerifier.__init__-45"><span class="linenos">45</span></a><span class="sd">        Args:</span>
-</span><span id="AnoynimityVerifier.__init__-46"><a href="#AnoynimityVerifier.__init__-46"><span class="linenos">46</span></a><span class="sd">            text: An iterable of strings or a string.</span>
-</span><span id="AnoynimityVerifier.__init__-47"><a href="#AnoynimityVerifier.__init__-47"><span class="linenos">47</span></a><span class="sd">            entity_recognition_model: The name of the spaCy model to use for named entity recognition.</span>
-</span><span id="AnoynimityVerifier.__init__-48"><a href="#AnoynimityVerifier.__init__-48"><span class="linenos">48</span></a><span class="sd">                If None, no model is loaded.</span>
-</span><span id="AnoynimityVerifier.__init__-49"><a href="#AnoynimityVerifier.__init__-49"><span class="linenos">49</span></a><span class="sd">            disallowed_words: An iterable of disallowed words. If None, the default list is used.</span>
-</span><span id="AnoynimityVerifier.__init__-50"><a href="#AnoynimityVerifier.__init__-50"><span class="linenos">50</span></a><span class="sd">            allowed_entities: An iterable of allowed named entities. If None, the default list is used.</span>
-</span><span id="AnoynimityVerifier.__init__-51"><a href="#AnoynimityVerifier.__init__-51"><span class="linenos">51</span></a>
-</span><span id="AnoynimityVerifier.__init__-52"><a href="#AnoynimityVerifier.__init__-52"><span class="linenos">52</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnoynimityVerifier.__init__-53"><a href="#AnoynimityVerifier.__init__-53"><span class="linenos">53</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-</span><span id="AnoynimityVerifier.__init__-54"><a href="#AnoynimityVerifier.__init__-54"><span class="linenos">54</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="AnoynimityVerifier.__init__-55"><a href="#AnoynimityVerifier.__init__-55"><span class="linenos">55</span></a>            <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">entity_recognition_model</span><span class="p">)</span> <span class="k">if</span> <span class="n">entity_recognition_model</span> <span class="k">else</span> <span class="kc">None</span>
-</span><span id="AnoynimityVerifier.__init__-56"><a href="#AnoynimityVerifier.__init__-56"><span class="linenos">56</span></a>        <span class="p">)</span>
-</span><span id="AnoynimityVerifier.__init__-57"><a href="#AnoynimityVerifier.__init__-57"><span class="linenos">57</span></a>
-</span><span id="AnoynimityVerifier.__init__-58"><a href="#AnoynimityVerifier.__init__-58"><span class="linenos">58</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span> <span class="o">=</span> <span class="n">allowed_entities</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_allowed_entities</span><span class="p">()</span>
-</span><span id="AnoynimityVerifier.__init__-59"><a href="#AnoynimityVerifier.__init__-59"><span class="linenos">59</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span> <span class="o">=</span> <span class="n">disallowed_words</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_disallowed_words</span><span class="p">()</span>
+    <a class="headerlink" href="#AnonyimityVerifier.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AnonyimityVerifier.__init__-36"><a href="#AnonyimityVerifier.__init__-36"><span class="linenos">36</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="AnonyimityVerifier.__init__-37"><a href="#AnonyimityVerifier.__init__-37"><span class="linenos">37</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="AnonyimityVerifier.__init__-38"><a href="#AnonyimityVerifier.__init__-38"><span class="linenos">38</span></a>        <span class="n">text</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+</span><span id="AnonyimityVerifier.__init__-39"><a href="#AnonyimityVerifier.__init__-39"><span class="linenos">39</span></a>        <span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">SPACY_MODEL</span><span class="p">,</span>
+</span><span id="AnonyimityVerifier.__init__-40"><a href="#AnonyimityVerifier.__init__-40"><span class="linenos">40</span></a>        <span class="n">disallowed_words</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="AnonyimityVerifier.__init__-41"><a href="#AnonyimityVerifier.__init__-41"><span class="linenos">41</span></a>        <span class="n">allowed_entities</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="AnonyimityVerifier.__init__-42"><a href="#AnonyimityVerifier.__init__-42"><span class="linenos">42</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AnonyimityVerifier.__init__-43"><a href="#AnonyimityVerifier.__init__-43"><span class="linenos">43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the AnoynimityVerifier object.</span>
+</span><span id="AnonyimityVerifier.__init__-44"><a href="#AnonyimityVerifier.__init__-44"><span class="linenos">44</span></a>
+</span><span id="AnonyimityVerifier.__init__-45"><a href="#AnonyimityVerifier.__init__-45"><span class="linenos">45</span></a><span class="sd">        Args:</span>
+</span><span id="AnonyimityVerifier.__init__-46"><a href="#AnonyimityVerifier.__init__-46"><span class="linenos">46</span></a><span class="sd">            text: An iterable of strings or a string.</span>
+</span><span id="AnonyimityVerifier.__init__-47"><a href="#AnonyimityVerifier.__init__-47"><span class="linenos">47</span></a><span class="sd">            entity_recognition_model: The name of the spaCy model to use for named entity recognition.</span>
+</span><span id="AnonyimityVerifier.__init__-48"><a href="#AnonyimityVerifier.__init__-48"><span class="linenos">48</span></a><span class="sd">                If None, no model is loaded.</span>
+</span><span id="AnonyimityVerifier.__init__-49"><a href="#AnonyimityVerifier.__init__-49"><span class="linenos">49</span></a><span class="sd">            disallowed_words: An iterable of disallowed words. If None, the default list is used.</span>
+</span><span id="AnonyimityVerifier.__init__-50"><a href="#AnonyimityVerifier.__init__-50"><span class="linenos">50</span></a><span class="sd">            allowed_entities: An iterable of allowed named entities. If None, the default list is used.</span>
+</span><span id="AnonyimityVerifier.__init__-51"><a href="#AnonyimityVerifier.__init__-51"><span class="linenos">51</span></a>
+</span><span id="AnonyimityVerifier.__init__-52"><a href="#AnonyimityVerifier.__init__-52"><span class="linenos">52</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier.__init__-53"><a href="#AnonyimityVerifier.__init__-53"><span class="linenos">53</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span><span id="AnonyimityVerifier.__init__-54"><a href="#AnonyimityVerifier.__init__-54"><span class="linenos">54</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="AnonyimityVerifier.__init__-55"><a href="#AnonyimityVerifier.__init__-55"><span class="linenos">55</span></a>            <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">entity_recognition_model</span><span class="p">)</span> <span class="k">if</span> <span class="n">entity_recognition_model</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span id="AnonyimityVerifier.__init__-56"><a href="#AnonyimityVerifier.__init__-56"><span class="linenos">56</span></a>        <span class="p">)</span>
+</span><span id="AnonyimityVerifier.__init__-57"><a href="#AnonyimityVerifier.__init__-57"><span class="linenos">57</span></a>
+</span><span id="AnonyimityVerifier.__init__-58"><a href="#AnonyimityVerifier.__init__-58"><span class="linenos">58</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span> <span class="o">=</span> <span class="n">allowed_entities</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_allowed_entities</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier.__init__-59"><a href="#AnonyimityVerifier.__init__-59"><span class="linenos">59</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span> <span class="o">=</span> <span class="n">disallowed_words</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_disallowed_words</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -519,68 +519,68 @@ If None, no model is loaded.</li>
 
 
                             </div>
-                            <div id="AnoynimityVerifier.text" class="classattr">
+                            <div id="AnonyimityVerifier.text" class="classattr">
                                 <div class="attr variable">
             <span class="name">text</span>
 
         
     </div>
-    <a class="headerlink" href="#AnoynimityVerifier.text"></a>
+    <a class="headerlink" href="#AnonyimityVerifier.text"></a>
     
     
 
                             </div>
-                            <div id="AnoynimityVerifier.entity_recognition_model" class="classattr">
+                            <div id="AnonyimityVerifier.entity_recognition_model" class="classattr">
                                 <div class="attr variable">
             <span class="name">entity_recognition_model</span>
 
         
     </div>
-    <a class="headerlink" href="#AnoynimityVerifier.entity_recognition_model"></a>
+    <a class="headerlink" href="#AnonyimityVerifier.entity_recognition_model"></a>
     
     
 
                             </div>
-                            <div id="AnoynimityVerifier.allowed_entities" class="classattr">
+                            <div id="AnonyimityVerifier.allowed_entities" class="classattr">
                                 <div class="attr variable">
             <span class="name">allowed_entities</span>
 
         
     </div>
-    <a class="headerlink" href="#AnoynimityVerifier.allowed_entities"></a>
+    <a class="headerlink" href="#AnonyimityVerifier.allowed_entities"></a>
     
     
 
                             </div>
-                            <div id="AnoynimityVerifier.disallowed_words" class="classattr">
+                            <div id="AnonyimityVerifier.disallowed_words" class="classattr">
                                 <div class="attr variable">
             <span class="name">disallowed_words</span>
 
         
     </div>
-    <a class="headerlink" href="#AnoynimityVerifier.disallowed_words"></a>
+    <a class="headerlink" href="#AnonyimityVerifier.disallowed_words"></a>
     
     
 
                             </div>
-                            <div id="AnoynimityVerifier.contains_any_disallowed" class="classattr">
-                                        <input id="AnoynimityVerifier.contains_any_disallowed-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="AnonyimityVerifier.find_any_disallowed" class="classattr">
+                                        <input id="AnonyimityVerifier.find_any_disallowed-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">contains_any_disallowed</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>:</span></span>
+        <span class="name">find_any_disallowed</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>:</span></span>
 
-                <label class="view-source-button" for="AnoynimityVerifier.contains_any_disallowed-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="AnonyimityVerifier.find_any_disallowed-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#AnoynimityVerifier.contains_any_disallowed"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AnoynimityVerifier.contains_any_disallowed-61"><a href="#AnoynimityVerifier.contains_any_disallowed-61"><span class="linenos">61</span></a>    <span class="k">def</span> <span class="nf">contains_any_disallowed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnoynimityVerifier.contains_any_disallowed-62"><a href="#AnoynimityVerifier.contains_any_disallowed-62"><span class="linenos">62</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document passes all checks.</span>
-</span><span id="AnoynimityVerifier.contains_any_disallowed-63"><a href="#AnoynimityVerifier.contains_any_disallowed-63"><span class="linenos">63</span></a>
-</span><span id="AnoynimityVerifier.contains_any_disallowed-64"><a href="#AnoynimityVerifier.contains_any_disallowed-64"><span class="linenos">64</span></a><span class="sd">        Returns:</span>
-</span><span id="AnoynimityVerifier.contains_any_disallowed-65"><a href="#AnoynimityVerifier.contains_any_disallowed-65"><span class="linenos">65</span></a><span class="sd">            The words that are not allowed.</span>
-</span><span id="AnoynimityVerifier.contains_any_disallowed-66"><a href="#AnoynimityVerifier.contains_any_disallowed-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnoynimityVerifier.contains_any_disallowed-67"><a href="#AnoynimityVerifier.contains_any_disallowed-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_disallowed_words</span><span class="p">()</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_named_entities</span><span class="p">()</span>
+    <a class="headerlink" href="#AnonyimityVerifier.find_any_disallowed"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AnonyimityVerifier.find_any_disallowed-61"><a href="#AnonyimityVerifier.find_any_disallowed-61"><span class="linenos">61</span></a>    <span class="k">def</span> <span class="nf">find_any_disallowed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier.find_any_disallowed-62"><a href="#AnonyimityVerifier.find_any_disallowed-62"><span class="linenos">62</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document passes all checks.</span>
+</span><span id="AnonyimityVerifier.find_any_disallowed-63"><a href="#AnonyimityVerifier.find_any_disallowed-63"><span class="linenos">63</span></a>
+</span><span id="AnonyimityVerifier.find_any_disallowed-64"><a href="#AnonyimityVerifier.find_any_disallowed-64"><span class="linenos">64</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier.find_any_disallowed-65"><a href="#AnonyimityVerifier.find_any_disallowed-65"><span class="linenos">65</span></a><span class="sd">            The words that are not allowed.</span>
+</span><span id="AnonyimityVerifier.find_any_disallowed-66"><a href="#AnonyimityVerifier.find_any_disallowed-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier.find_any_disallowed-67"><a href="#AnonyimityVerifier.find_any_disallowed-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_disallowed_words</span><span class="p">()</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_named_entities</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -595,28 +595,28 @@ If None, no model is loaded.</li>
 
 
                             </div>
-                            <div id="AnoynimityVerifier.find_disallowed_words" class="classattr">
-                                        <input id="AnoynimityVerifier.find_disallowed_words-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="AnonyimityVerifier.find_disallowed_words" class="classattr">
+                                        <input id="AnonyimityVerifier.find_disallowed_words-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
         <span class="name">find_disallowed_words</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>:</span></span>
 
-                <label class="view-source-button" for="AnoynimityVerifier.find_disallowed_words-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="AnonyimityVerifier.find_disallowed_words-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#AnoynimityVerifier.find_disallowed_words"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AnoynimityVerifier.find_disallowed_words-69"><a href="#AnoynimityVerifier.find_disallowed_words-69"><span class="linenos">69</span></a>    <span class="k">def</span> <span class="nf">find_disallowed_words</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnoynimityVerifier.find_disallowed_words-70"><a href="#AnoynimityVerifier.find_disallowed_words-70"><span class="linenos">70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains disallowed words.</span>
-</span><span id="AnoynimityVerifier.find_disallowed_words-71"><a href="#AnoynimityVerifier.find_disallowed_words-71"><span class="linenos">71</span></a>
-</span><span id="AnoynimityVerifier.find_disallowed_words-72"><a href="#AnoynimityVerifier.find_disallowed_words-72"><span class="linenos">72</span></a><span class="sd">        Returns:</span>
-</span><span id="AnoynimityVerifier.find_disallowed_words-73"><a href="#AnoynimityVerifier.find_disallowed_words-73"><span class="linenos">73</span></a><span class="sd">            True if the document contains disallowed words, False otherwise.</span>
-</span><span id="AnoynimityVerifier.find_disallowed_words-74"><a href="#AnoynimityVerifier.find_disallowed_words-74"><span class="linenos">74</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnoynimityVerifier.find_disallowed_words-75"><a href="#AnoynimityVerifier.find_disallowed_words-75"><span class="linenos">75</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="AnoynimityVerifier.find_disallowed_words-76"><a href="#AnoynimityVerifier.find_disallowed_words-76"><span class="linenos">76</span></a>            <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span>
-</span><span id="AnoynimityVerifier.find_disallowed_words-77"><a href="#AnoynimityVerifier.find_disallowed_words-77"><span class="linenos">77</span></a>        <span class="p">}</span>
-</span><span id="AnoynimityVerifier.find_disallowed_words-78"><a href="#AnoynimityVerifier.find_disallowed_words-78"><span class="linenos">78</span></a>
-</span><span id="AnoynimityVerifier.find_disallowed_words-79"><a href="#AnoynimityVerifier.find_disallowed_words-79"><span class="linenos">79</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
+    <a class="headerlink" href="#AnonyimityVerifier.find_disallowed_words"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AnonyimityVerifier.find_disallowed_words-69"><a href="#AnonyimityVerifier.find_disallowed_words-69"><span class="linenos">69</span></a>    <span class="k">def</span> <span class="nf">find_disallowed_words</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-70"><a href="#AnonyimityVerifier.find_disallowed_words-70"><span class="linenos">70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains disallowed words.</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-71"><a href="#AnonyimityVerifier.find_disallowed_words-71"><span class="linenos">71</span></a>
+</span><span id="AnonyimityVerifier.find_disallowed_words-72"><a href="#AnonyimityVerifier.find_disallowed_words-72"><span class="linenos">72</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-73"><a href="#AnonyimityVerifier.find_disallowed_words-73"><span class="linenos">73</span></a><span class="sd">            True if the document contains disallowed words, False otherwise.</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-74"><a href="#AnonyimityVerifier.find_disallowed_words-74"><span class="linenos">74</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-75"><a href="#AnonyimityVerifier.find_disallowed_words-75"><span class="linenos">75</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-76"><a href="#AnonyimityVerifier.find_disallowed_words-76"><span class="linenos">76</span></a>            <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-77"><a href="#AnonyimityVerifier.find_disallowed_words-77"><span class="linenos">77</span></a>        <span class="p">}</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-78"><a href="#AnonyimityVerifier.find_disallowed_words-78"><span class="linenos">78</span></a>
+</span><span id="AnonyimityVerifier.find_disallowed_words-79"><a href="#AnonyimityVerifier.find_disallowed_words-79"><span class="linenos">79</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
 </span></pre></div>
 
 
@@ -631,33 +631,33 @@ If None, no model is loaded.</li>
 
 
                             </div>
-                            <div id="AnoynimityVerifier.find_named_entities" class="classattr">
-                                        <input id="AnoynimityVerifier.find_named_entities-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="AnonyimityVerifier.find_named_entities" class="classattr">
+                                        <input id="AnonyimityVerifier.find_named_entities-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
         <span class="name">find_named_entities</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>:</span></span>
 
-                <label class="view-source-button" for="AnoynimityVerifier.find_named_entities-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="AnonyimityVerifier.find_named_entities-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#AnoynimityVerifier.find_named_entities"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AnoynimityVerifier.find_named_entities-81"><a href="#AnoynimityVerifier.find_named_entities-81"><span class="linenos">81</span></a>    <span class="k">def</span> <span class="nf">find_named_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnoynimityVerifier.find_named_entities-82"><a href="#AnoynimityVerifier.find_named_entities-82"><span class="linenos">82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find name entities in the document.</span>
-</span><span id="AnoynimityVerifier.find_named_entities-83"><a href="#AnoynimityVerifier.find_named_entities-83"><span class="linenos">83</span></a>
-</span><span id="AnoynimityVerifier.find_named_entities-84"><a href="#AnoynimityVerifier.find_named_entities-84"><span class="linenos">84</span></a><span class="sd">        Returns:</span>
-</span><span id="AnoynimityVerifier.find_named_entities-85"><a href="#AnoynimityVerifier.find_named_entities-85"><span class="linenos">85</span></a><span class="sd">            The detected named entities.</span>
-</span><span id="AnoynimityVerifier.find_named_entities-86"><a href="#AnoynimityVerifier.find_named_entities-86"><span class="linenos">86</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnoynimityVerifier.find_named_entities-87"><a href="#AnoynimityVerifier.find_named_entities-87"><span class="linenos">87</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">:</span>
-</span><span id="AnoynimityVerifier.find_named_entities-88"><a href="#AnoynimityVerifier.find_named_entities-88"><span class="linenos">88</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="AnoynimityVerifier.find_named_entities-89"><a href="#AnoynimityVerifier.find_named_entities-89"><span class="linenos">89</span></a>                <span class="s2">&quot;No spaCy model loaded. Please provide a spaCy model name to the constructor.&quot;</span>
-</span><span id="AnoynimityVerifier.find_named_entities-90"><a href="#AnoynimityVerifier.find_named_entities-90"><span class="linenos">90</span></a>            <span class="p">)</span>
-</span><span id="AnoynimityVerifier.find_named_entities-91"><a href="#AnoynimityVerifier.find_named_entities-91"><span class="linenos">91</span></a>
-</span><span id="AnoynimityVerifier.find_named_entities-92"><a href="#AnoynimityVerifier.find_named_entities-92"><span class="linenos">92</span></a>        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</span><span id="AnoynimityVerifier.find_named_entities-93"><a href="#AnoynimityVerifier.find_named_entities-93"><span class="linenos">93</span></a>        <span class="n">entities</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">}</span>
-</span><span id="AnoynimityVerifier.find_named_entities-94"><a href="#AnoynimityVerifier.find_named_entities-94"><span class="linenos">94</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="n">entities</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span><span class="p">)</span>
-</span><span id="AnoynimityVerifier.find_named_entities-95"><a href="#AnoynimityVerifier.find_named_entities-95"><span class="linenos">95</span></a>
-</span><span id="AnoynimityVerifier.find_named_entities-96"><a href="#AnoynimityVerifier.find_named_entities-96"><span class="linenos">96</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
+    <a class="headerlink" href="#AnonyimityVerifier.find_named_entities"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AnonyimityVerifier.find_named_entities-81"><a href="#AnonyimityVerifier.find_named_entities-81"><span class="linenos">81</span></a>    <span class="k">def</span> <span class="nf">find_named_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier.find_named_entities-82"><a href="#AnonyimityVerifier.find_named_entities-82"><span class="linenos">82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find name entities in the document.</span>
+</span><span id="AnonyimityVerifier.find_named_entities-83"><a href="#AnonyimityVerifier.find_named_entities-83"><span class="linenos">83</span></a>
+</span><span id="AnonyimityVerifier.find_named_entities-84"><a href="#AnonyimityVerifier.find_named_entities-84"><span class="linenos">84</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier.find_named_entities-85"><a href="#AnonyimityVerifier.find_named_entities-85"><span class="linenos">85</span></a><span class="sd">            The detected named entities.</span>
+</span><span id="AnonyimityVerifier.find_named_entities-86"><a href="#AnonyimityVerifier.find_named_entities-86"><span class="linenos">86</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier.find_named_entities-87"><a href="#AnonyimityVerifier.find_named_entities-87"><span class="linenos">87</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">:</span>
+</span><span id="AnonyimityVerifier.find_named_entities-88"><a href="#AnonyimityVerifier.find_named_entities-88"><span class="linenos">88</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="AnonyimityVerifier.find_named_entities-89"><a href="#AnonyimityVerifier.find_named_entities-89"><span class="linenos">89</span></a>                <span class="s2">&quot;No spaCy model loaded. Please provide a spaCy model name to the constructor.&quot;</span>
+</span><span id="AnonyimityVerifier.find_named_entities-90"><a href="#AnonyimityVerifier.find_named_entities-90"><span class="linenos">90</span></a>            <span class="p">)</span>
+</span><span id="AnonyimityVerifier.find_named_entities-91"><a href="#AnonyimityVerifier.find_named_entities-91"><span class="linenos">91</span></a>
+</span><span id="AnonyimityVerifier.find_named_entities-92"><a href="#AnonyimityVerifier.find_named_entities-92"><span class="linenos">92</span></a>        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span><span id="AnonyimityVerifier.find_named_entities-93"><a href="#AnonyimityVerifier.find_named_entities-93"><span class="linenos">93</span></a>        <span class="n">entities</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">}</span>
+</span><span id="AnonyimityVerifier.find_named_entities-94"><a href="#AnonyimityVerifier.find_named_entities-94"><span class="linenos">94</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="n">entities</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span><span class="p">)</span>
+</span><span id="AnonyimityVerifier.find_named_entities-95"><a href="#AnonyimityVerifier.find_named_entities-95"><span class="linenos">95</span></a>
+</span><span id="AnonyimityVerifier.find_named_entities-96"><a href="#AnonyimityVerifier.find_named_entities-96"><span class="linenos">96</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
 </span></pre></div>
 
 
@@ -678,15 +678,15 @@ If None, no model is loaded.</li>
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">WordDocument</span><wbr>(<span class="base"><a href="#AnoynimityVerifier">AnoynimityVerifier</a></span>):
+    <span class="name">WordDocument</span><wbr>(<span class="base"><a href="#AnonyimityVerifier">AnonyimityVerifier</a></span>):
 
                 <label class="view-source-button" for="WordDocument-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#WordDocument"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="WordDocument-109"><a href="#WordDocument-109"><span class="linenos">109</span></a><span class="k">class</span> <span class="nc">WordDocument</span><span class="p">(</span><span class="n">AnoynimityVerifier</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WordDocument-109"><a href="#WordDocument-109"><span class="linenos">109</span></a><span class="k">class</span> <span class="nc">WordDocument</span><span class="p">(</span><span class="n">AnonyimityVerifier</span><span class="p">):</span>
 </span><span id="WordDocument-110"><a href="#WordDocument-110"><span class="linenos">110</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a Word document that can be used to verify the anonymity of its contents.</span>
-</span><span id="WordDocument-111"><a href="#WordDocument-111"><span class="linenos">111</span></a><span class="sd">    Inherits from `AnoynimityVerifier`.</span>
+</span><span id="WordDocument-111"><a href="#WordDocument-111"><span class="linenos">111</span></a><span class="sd">    Inherits from `AnonyimityVerifier`.</span>
 </span><span id="WordDocument-112"><a href="#WordDocument-112"><span class="linenos">112</span></a>
 </span><span id="WordDocument-113"><a href="#WordDocument-113"><span class="linenos">113</span></a><span class="sd">    Args:</span>
 </span><span id="WordDocument-114"><a href="#WordDocument-114"><span class="linenos">114</span></a><span class="sd">        filename: The path to the Word document file.</span>
@@ -720,7 +720,7 @@ If None, no model is loaded.</li>
 
 
             <div class="docstring"><p>A class representing a Word document that can be used to verify the anonymity of its contents.
-Inherits from <code><a href="#AnoynimityVerifier">AnoynimityVerifier</a></code>.</p>
+Inherits from <code><a href="#AnonyimityVerifier">AnonyimityVerifier</a></code>.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
@@ -806,14 +806,14 @@ Inherits from <code><a href="#AnoynimityVerifier">AnoynimityVerifier</a></code>.
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
-                                    <div><dt><a href="#AnoynimityVerifier">AnoynimityVerifier</a></dt>
-                                <dd id="WordDocument.text" class="variable"><a href="#AnoynimityVerifier.text">text</a></dd>
-                <dd id="WordDocument.entity_recognition_model" class="variable"><a href="#AnoynimityVerifier.entity_recognition_model">entity_recognition_model</a></dd>
-                <dd id="WordDocument.allowed_entities" class="variable"><a href="#AnoynimityVerifier.allowed_entities">allowed_entities</a></dd>
-                <dd id="WordDocument.disallowed_words" class="variable"><a href="#AnoynimityVerifier.disallowed_words">disallowed_words</a></dd>
-                <dd id="WordDocument.contains_any_disallowed" class="function"><a href="#AnoynimityVerifier.contains_any_disallowed">contains_any_disallowed</a></dd>
-                <dd id="WordDocument.find_disallowed_words" class="function"><a href="#AnoynimityVerifier.find_disallowed_words">find_disallowed_words</a></dd>
-                <dd id="WordDocument.find_named_entities" class="function"><a href="#AnoynimityVerifier.find_named_entities">find_named_entities</a></dd>
+                                    <div><dt><a href="#AnonyimityVerifier">AnonyimityVerifier</a></dt>
+                                <dd id="WordDocument.text" class="variable"><a href="#AnonyimityVerifier.text">text</a></dd>
+                <dd id="WordDocument.entity_recognition_model" class="variable"><a href="#AnonyimityVerifier.entity_recognition_model">entity_recognition_model</a></dd>
+                <dd id="WordDocument.allowed_entities" class="variable"><a href="#AnonyimityVerifier.allowed_entities">allowed_entities</a></dd>
+                <dd id="WordDocument.disallowed_words" class="variable"><a href="#AnonyimityVerifier.disallowed_words">disallowed_words</a></dd>
+                <dd id="WordDocument.find_any_disallowed" class="function"><a href="#AnonyimityVerifier.find_any_disallowed">find_any_disallowed</a></dd>
+                <dd id="WordDocument.find_disallowed_words" class="function"><a href="#AnonyimityVerifier.find_disallowed_words">find_disallowed_words</a></dd>
+                <dd id="WordDocument.find_named_entities" class="function"><a href="#AnonyimityVerifier.find_named_entities">find_named_entities</a></dd>
 
             </div>
                                 </dl>
