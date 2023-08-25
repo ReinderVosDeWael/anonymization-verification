@@ -24,11 +24,11 @@ jobs:
       - name: Run tests
         run: >
           test_output=$(
-              poetry run pytest
-                --junitxml=pytest.xml
-                --cov-report=term-missing:skip-covered
-                --cov-report=xml:coverage.xml
-                --cov=src tests
+              poetry run pytest \
+                --junitxml=pytest.xml \
+                --cov-report=term-missing:skip-covered \
+                --cov-report=xml:coverage.xml \
+                --cov=src tests \
               );
           exit_status=$?;
           echo "$test_output" > pytest-coverage.txt;
