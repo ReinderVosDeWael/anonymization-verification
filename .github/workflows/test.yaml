@@ -22,8 +22,17 @@ jobs:
           python -m pip install poetry
           poetry install
       - name: Run tests
-        run: poetry run pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov-report=xml:coverage.xml --cov=src tests && tee pytest-coverage.txt || $(tee pytest-coverage.txt; exit 1)
-
+        run: >
+          test_output=$(
+              poetry run pytest
+                --junitxml=pytest.xml
+                --cov-report=term-missing:skip-covered
+                --cov-report=xml:coverage.xml
+                --cov=src tests
+              );
+          exit_status=$?;
+          echo "$test_output" > pytest-coverage.txt;
+          exit $exit_status
       - name: Pytest coverage comment
         if: (success() || failure()) && github.event_name == 'pull_request'
         uses: MishaKav/pytest-coverage-comment@main
@@ -31,6 +40,7 @@ jobs:
           pytest-coverage-path: ./pytest-coverage.txt
           junitxml-path: ./pytest.xml
       - name: Upload coverage to Codecov
+        if: success() || failure()
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
