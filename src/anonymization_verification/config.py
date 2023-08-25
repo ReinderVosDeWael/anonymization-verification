@@ -50,4 +50,4 @@ def get_settings() -> Settings:
     """Cached call that returns the settings for the anonymization
     verification application.
     """
-    return Settings()
+    return Settings()  # type: ignore[call-arg]
