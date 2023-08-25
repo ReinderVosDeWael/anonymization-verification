@@ -18,33 +18,27 @@ jobs:
         run: |
           python -m pip install poetry
           poetry install
-      - name: run-tests
+      - name: Run tests
         continue-on-error: true
         run: >
-          test_output=$(
-              poetry run pytest \
-                --junitxml=pytest.xml \
-                --cov-report=term-missing:skip-covered \
-                --cov-report=xml:coverage.xml \
-                --cov=src tests \
-              );
-          exit_status=$?;
-          echo "$test_output" > ./pytest-coverage.txt;
-          exit $exit_status
+          poetry run pytest \
+            --junitxml=pytest.xml \
+            --cov-report=term-missing:skip-covered \
+            --cov-report=xml:coverage.xml \
+            --cov=src tests \
+            > ./pytest-coverage.txt;
       - name: Upload pytest coverage artifacts.
-        if: success() || failure()
         uses: actions/upload-artifact@v2
         with:
           name: pytest-coverage
           path: ./pytest-coverage.txt
       - name: Upload pytest junitxml artifacts.
-        if: success() || failure()
         uses: actions/upload-artifact@v2
         with:
           name: pytest-junitxml
           path: pytest.xml
       - name: Checking testing success.
-        if: steps.run-tests.outcome != 'success'
+        if: steps.Run-tests.outcome != 'success'
         run: exit 1;
 
   coverage:
