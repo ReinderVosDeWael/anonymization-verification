@@ -32,6 +32,8 @@ jobs:
               );
           exit_status=$?;
           echo "$test_output" > pytest-coverage.txt;
+          echo "Test output: $test_output"
+          echo "----------!!!!---------"
           exit $exit_status
       - name: Pytest coverage comment
         if: (success() || failure()) && github.event_name == 'pull_request'
