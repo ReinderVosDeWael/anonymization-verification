@@ -79,6 +79,9 @@
                                 <a class="function" href="#AnonyimityVerifier.find_disallowed_words">find_disallowed_words</a>
                         </li>
                         <li>
+                                <a class="function" href="#AnonyimityVerifier.find_faulty_conjugations">find_faulty_conjugations</a>
+                        </li>
+                        <li>
                                 <a class="function" href="#AnonyimityVerifier.find_named_entities">find_named_entities</a>
                         </li>
                 </ul>
@@ -134,7 +137,7 @@ it contains gendered language or named entities.</p>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">import</span> <span class="nn">docx</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">import</span> <span class="nn">spacy</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span> <span class="nn">anonymization_verification</span> <span class="kn">import</span> <span class="n">config</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span> <span class="nn">anonymization_verification</span> <span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">conjugations</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="n">settings</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_settings</span><span class="p">()</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="n">SPACY_MODEL</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">spacy_model</span>
@@ -188,80 +191,95 @@ it contains gendered language or named entities.</p>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">        Returns:</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">            The words that are not allowed.</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_disallowed_words</span><span class="p">()</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_named_entities</span><span class="p">()</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="k">def</span> <span class="nf">find_disallowed_words</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains disallowed words.</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">        Returns:</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">            True if the document contains disallowed words, False otherwise.</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>            <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>        <span class="p">}</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>    <span class="k">def</span> <span class="nf">find_named_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find name entities in the document.</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">        Returns:</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">            The detected named entities.</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">:</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>                <span class="s2">&quot;No spaCy model loaded. Please provide a spaCy model name to the constructor.&quot;</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>            <span class="p">)</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">find_disallowed_words</span><span class="p">()</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>            <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_named_entities</span><span class="p">()</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>            <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_faulty_conjugations</span><span class="p">()</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>        <span class="p">)</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="k">def</span> <span class="nf">find_disallowed_words</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains disallowed words.</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">        Returns:</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">            True if the document contains disallowed words, False otherwise.</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>            <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>        <span class="p">}</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>    <span class="k">def</span> <span class="nf">find_faulty_conjugations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains verbs that are not conjugated properly</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">        for both he/she and they.</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">        Returns:</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">            The verbs that are not conjugated properly.</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>        <span class="n">entities</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">}</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="n">entities</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span><span class="p">)</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>        <span class="n">english_conjugator</span> <span class="o">=</span> <span class="n">conjugations</span><span class="o">.</span><span class="n">CorrectConjugations</span><span class="p">()</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="k">return</span> <span class="n">english_conjugator</span><span class="o">.</span><span class="n">find_faulty_conjugation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>    <span class="k">def</span> <span class="nf">_default_allowed_entities</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ALLOWED_ENTITIES_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>    <span class="k">def</span> <span class="nf">_default_disallowed_words</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DISALLOWED_WORDS_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="k">class</span> <span class="nc">WordDocument</span><span class="p">(</span><span class="n">AnonyimityVerifier</span><span class="p">):</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a Word document that can be used to verify the anonymity of its contents.</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">    Inherits from `AnonyimityVerifier`.</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="k">def</span> <span class="nf">find_named_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find name entities in the document.</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        Returns:</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">            The detected named entities.</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">:</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>                <span class="s2">&quot;No spaCy model loaded. Please provide a spaCy model name to the constructor.&quot;</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>            <span class="p">)</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="n">entities</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">}</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="n">entities</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span><span class="p">)</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">    Args:</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        filename: The path to the Word document file.</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">        filename: The path to the Word document file.</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">        document: The Word document object.</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>        <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>        <span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">SPACY_MODEL</span><span class="p">,</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the WordDocument object.</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="k">def</span> <span class="nf">_default_allowed_entities</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ALLOWED_ENTITIES_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="k">def</span> <span class="nf">_default_disallowed_words</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DISALLOWED_WORDS_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="k">class</span> <span class="nc">WordDocument</span><span class="p">(</span><span class="n">AnonyimityVerifier</span><span class="p">):</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a Word document that can be used to verify the anonymity of its contents.</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">    Inherits from `AnonyimityVerifier`.</span>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">        Args:</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">            filename: The path to the Word document file.</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">    Args:</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">        filename: The path to the Word document file.</span>
 </span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">docx</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>        <span class="n">paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>        <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">paragraphs</span><span class="p">:</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">paragraph</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="p">)</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>            <span class="k">else</span><span class="p">:</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">paragraphs</span><span class="p">,</span> <span class="n">entity_recognition_model</span><span class="o">=</span><span class="n">entity_recognition_model</span><span class="p">)</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">        filename: The path to the Word document file.</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">        document: The Word document object.</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>        <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>        <span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">SPACY_MODEL</span><span class="p">,</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the WordDocument object.</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">        Args:</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">            filename: The path to the Word document file.</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">docx</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>        <span class="n">paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>        <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">paragraphs</span><span class="p">:</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">paragraph</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="p">)</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">paragraphs</span><span class="p">,</span> <span class="n">entity_recognition_model</span><span class="o">=</span><span class="n">entity_recognition_model</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -414,46 +432,61 @@ it contains gendered language or named entities.</p>
 </span><span id="AnonyimityVerifier-64"><a href="#AnonyimityVerifier-64"><span class="linenos"> 64</span></a><span class="sd">        Returns:</span>
 </span><span id="AnonyimityVerifier-65"><a href="#AnonyimityVerifier-65"><span class="linenos"> 65</span></a><span class="sd">            The words that are not allowed.</span>
 </span><span id="AnonyimityVerifier-66"><a href="#AnonyimityVerifier-66"><span class="linenos"> 66</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnonyimityVerifier-67"><a href="#AnonyimityVerifier-67"><span class="linenos"> 67</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_disallowed_words</span><span class="p">()</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_named_entities</span><span class="p">()</span>
-</span><span id="AnonyimityVerifier-68"><a href="#AnonyimityVerifier-68"><span class="linenos"> 68</span></a>
-</span><span id="AnonyimityVerifier-69"><a href="#AnonyimityVerifier-69"><span class="linenos"> 69</span></a>    <span class="k">def</span> <span class="nf">find_disallowed_words</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnonyimityVerifier-70"><a href="#AnonyimityVerifier-70"><span class="linenos"> 70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains disallowed words.</span>
-</span><span id="AnonyimityVerifier-71"><a href="#AnonyimityVerifier-71"><span class="linenos"> 71</span></a>
-</span><span id="AnonyimityVerifier-72"><a href="#AnonyimityVerifier-72"><span class="linenos"> 72</span></a><span class="sd">        Returns:</span>
-</span><span id="AnonyimityVerifier-73"><a href="#AnonyimityVerifier-73"><span class="linenos"> 73</span></a><span class="sd">            True if the document contains disallowed words, False otherwise.</span>
-</span><span id="AnonyimityVerifier-74"><a href="#AnonyimityVerifier-74"><span class="linenos"> 74</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnonyimityVerifier-75"><a href="#AnonyimityVerifier-75"><span class="linenos"> 75</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="AnonyimityVerifier-76"><a href="#AnonyimityVerifier-76"><span class="linenos"> 76</span></a>            <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span>
-</span><span id="AnonyimityVerifier-77"><a href="#AnonyimityVerifier-77"><span class="linenos"> 77</span></a>        <span class="p">}</span>
-</span><span id="AnonyimityVerifier-78"><a href="#AnonyimityVerifier-78"><span class="linenos"> 78</span></a>
-</span><span id="AnonyimityVerifier-79"><a href="#AnonyimityVerifier-79"><span class="linenos"> 79</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
-</span><span id="AnonyimityVerifier-80"><a href="#AnonyimityVerifier-80"><span class="linenos"> 80</span></a>
-</span><span id="AnonyimityVerifier-81"><a href="#AnonyimityVerifier-81"><span class="linenos"> 81</span></a>    <span class="k">def</span> <span class="nf">find_named_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnonyimityVerifier-82"><a href="#AnonyimityVerifier-82"><span class="linenos"> 82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find name entities in the document.</span>
-</span><span id="AnonyimityVerifier-83"><a href="#AnonyimityVerifier-83"><span class="linenos"> 83</span></a>
-</span><span id="AnonyimityVerifier-84"><a href="#AnonyimityVerifier-84"><span class="linenos"> 84</span></a><span class="sd">        Returns:</span>
-</span><span id="AnonyimityVerifier-85"><a href="#AnonyimityVerifier-85"><span class="linenos"> 85</span></a><span class="sd">            The detected named entities.</span>
-</span><span id="AnonyimityVerifier-86"><a href="#AnonyimityVerifier-86"><span class="linenos"> 86</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnonyimityVerifier-87"><a href="#AnonyimityVerifier-87"><span class="linenos"> 87</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">:</span>
-</span><span id="AnonyimityVerifier-88"><a href="#AnonyimityVerifier-88"><span class="linenos"> 88</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="AnonyimityVerifier-89"><a href="#AnonyimityVerifier-89"><span class="linenos"> 89</span></a>                <span class="s2">&quot;No spaCy model loaded. Please provide a spaCy model name to the constructor.&quot;</span>
-</span><span id="AnonyimityVerifier-90"><a href="#AnonyimityVerifier-90"><span class="linenos"> 90</span></a>            <span class="p">)</span>
+</span><span id="AnonyimityVerifier-67"><a href="#AnonyimityVerifier-67"><span class="linenos"> 67</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="AnonyimityVerifier-68"><a href="#AnonyimityVerifier-68"><span class="linenos"> 68</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">find_disallowed_words</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier-69"><a href="#AnonyimityVerifier-69"><span class="linenos"> 69</span></a>            <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_named_entities</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier-70"><a href="#AnonyimityVerifier-70"><span class="linenos"> 70</span></a>            <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_faulty_conjugations</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier-71"><a href="#AnonyimityVerifier-71"><span class="linenos"> 71</span></a>        <span class="p">)</span>
+</span><span id="AnonyimityVerifier-72"><a href="#AnonyimityVerifier-72"><span class="linenos"> 72</span></a>
+</span><span id="AnonyimityVerifier-73"><a href="#AnonyimityVerifier-73"><span class="linenos"> 73</span></a>    <span class="k">def</span> <span class="nf">find_disallowed_words</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier-74"><a href="#AnonyimityVerifier-74"><span class="linenos"> 74</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains disallowed words.</span>
+</span><span id="AnonyimityVerifier-75"><a href="#AnonyimityVerifier-75"><span class="linenos"> 75</span></a>
+</span><span id="AnonyimityVerifier-76"><a href="#AnonyimityVerifier-76"><span class="linenos"> 76</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier-77"><a href="#AnonyimityVerifier-77"><span class="linenos"> 77</span></a><span class="sd">            True if the document contains disallowed words, False otherwise.</span>
+</span><span id="AnonyimityVerifier-78"><a href="#AnonyimityVerifier-78"><span class="linenos"> 78</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier-79"><a href="#AnonyimityVerifier-79"><span class="linenos"> 79</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="AnonyimityVerifier-80"><a href="#AnonyimityVerifier-80"><span class="linenos"> 80</span></a>            <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span>
+</span><span id="AnonyimityVerifier-81"><a href="#AnonyimityVerifier-81"><span class="linenos"> 81</span></a>        <span class="p">}</span>
+</span><span id="AnonyimityVerifier-82"><a href="#AnonyimityVerifier-82"><span class="linenos"> 82</span></a>
+</span><span id="AnonyimityVerifier-83"><a href="#AnonyimityVerifier-83"><span class="linenos"> 83</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
+</span><span id="AnonyimityVerifier-84"><a href="#AnonyimityVerifier-84"><span class="linenos"> 84</span></a>
+</span><span id="AnonyimityVerifier-85"><a href="#AnonyimityVerifier-85"><span class="linenos"> 85</span></a>    <span class="k">def</span> <span class="nf">find_faulty_conjugations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier-86"><a href="#AnonyimityVerifier-86"><span class="linenos"> 86</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains verbs that are not conjugated properly</span>
+</span><span id="AnonyimityVerifier-87"><a href="#AnonyimityVerifier-87"><span class="linenos"> 87</span></a><span class="sd">        for both he/she and they.</span>
+</span><span id="AnonyimityVerifier-88"><a href="#AnonyimityVerifier-88"><span class="linenos"> 88</span></a>
+</span><span id="AnonyimityVerifier-89"><a href="#AnonyimityVerifier-89"><span class="linenos"> 89</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier-90"><a href="#AnonyimityVerifier-90"><span class="linenos"> 90</span></a><span class="sd">            The verbs that are not conjugated properly.</span>
 </span><span id="AnonyimityVerifier-91"><a href="#AnonyimityVerifier-91"><span class="linenos"> 91</span></a>
-</span><span id="AnonyimityVerifier-92"><a href="#AnonyimityVerifier-92"><span class="linenos"> 92</span></a>        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</span><span id="AnonyimityVerifier-93"><a href="#AnonyimityVerifier-93"><span class="linenos"> 93</span></a>        <span class="n">entities</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">}</span>
-</span><span id="AnonyimityVerifier-94"><a href="#AnonyimityVerifier-94"><span class="linenos"> 94</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="n">entities</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span><span class="p">)</span>
+</span><span id="AnonyimityVerifier-92"><a href="#AnonyimityVerifier-92"><span class="linenos"> 92</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier-93"><a href="#AnonyimityVerifier-93"><span class="linenos"> 93</span></a>        <span class="n">english_conjugator</span> <span class="o">=</span> <span class="n">conjugations</span><span class="o">.</span><span class="n">CorrectConjugations</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier-94"><a href="#AnonyimityVerifier-94"><span class="linenos"> 94</span></a>        <span class="k">return</span> <span class="n">english_conjugator</span><span class="o">.</span><span class="n">find_faulty_conjugation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 </span><span id="AnonyimityVerifier-95"><a href="#AnonyimityVerifier-95"><span class="linenos"> 95</span></a>
-</span><span id="AnonyimityVerifier-96"><a href="#AnonyimityVerifier-96"><span class="linenos"> 96</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
-</span><span id="AnonyimityVerifier-97"><a href="#AnonyimityVerifier-97"><span class="linenos"> 97</span></a>
-</span><span id="AnonyimityVerifier-98"><a href="#AnonyimityVerifier-98"><span class="linenos"> 98</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="AnonyimityVerifier-99"><a href="#AnonyimityVerifier-99"><span class="linenos"> 99</span></a>    <span class="k">def</span> <span class="nf">_default_allowed_entities</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnonyimityVerifier-100"><a href="#AnonyimityVerifier-100"><span class="linenos">100</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ALLOWED_ENTITIES_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
-</span><span id="AnonyimityVerifier-101"><a href="#AnonyimityVerifier-101"><span class="linenos">101</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
-</span><span id="AnonyimityVerifier-102"><a href="#AnonyimityVerifier-102"><span class="linenos">102</span></a>
-</span><span id="AnonyimityVerifier-103"><a href="#AnonyimityVerifier-103"><span class="linenos">103</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="AnonyimityVerifier-104"><a href="#AnonyimityVerifier-104"><span class="linenos">104</span></a>    <span class="k">def</span> <span class="nf">_default_disallowed_words</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnonyimityVerifier-105"><a href="#AnonyimityVerifier-105"><span class="linenos">105</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DISALLOWED_WORDS_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
-</span><span id="AnonyimityVerifier-106"><a href="#AnonyimityVerifier-106"><span class="linenos">106</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
+</span><span id="AnonyimityVerifier-96"><a href="#AnonyimityVerifier-96"><span class="linenos"> 96</span></a>    <span class="k">def</span> <span class="nf">find_named_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier-97"><a href="#AnonyimityVerifier-97"><span class="linenos"> 97</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find name entities in the document.</span>
+</span><span id="AnonyimityVerifier-98"><a href="#AnonyimityVerifier-98"><span class="linenos"> 98</span></a>
+</span><span id="AnonyimityVerifier-99"><a href="#AnonyimityVerifier-99"><span class="linenos"> 99</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier-100"><a href="#AnonyimityVerifier-100"><span class="linenos">100</span></a><span class="sd">            The detected named entities.</span>
+</span><span id="AnonyimityVerifier-101"><a href="#AnonyimityVerifier-101"><span class="linenos">101</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier-102"><a href="#AnonyimityVerifier-102"><span class="linenos">102</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">:</span>
+</span><span id="AnonyimityVerifier-103"><a href="#AnonyimityVerifier-103"><span class="linenos">103</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="AnonyimityVerifier-104"><a href="#AnonyimityVerifier-104"><span class="linenos">104</span></a>                <span class="s2">&quot;No spaCy model loaded. Please provide a spaCy model name to the constructor.&quot;</span>
+</span><span id="AnonyimityVerifier-105"><a href="#AnonyimityVerifier-105"><span class="linenos">105</span></a>            <span class="p">)</span>
+</span><span id="AnonyimityVerifier-106"><a href="#AnonyimityVerifier-106"><span class="linenos">106</span></a>
+</span><span id="AnonyimityVerifier-107"><a href="#AnonyimityVerifier-107"><span class="linenos">107</span></a>        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span><span id="AnonyimityVerifier-108"><a href="#AnonyimityVerifier-108"><span class="linenos">108</span></a>        <span class="n">entities</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">}</span>
+</span><span id="AnonyimityVerifier-109"><a href="#AnonyimityVerifier-109"><span class="linenos">109</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="n">entities</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span><span class="p">)</span>
+</span><span id="AnonyimityVerifier-110"><a href="#AnonyimityVerifier-110"><span class="linenos">110</span></a>
+</span><span id="AnonyimityVerifier-111"><a href="#AnonyimityVerifier-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
+</span><span id="AnonyimityVerifier-112"><a href="#AnonyimityVerifier-112"><span class="linenos">112</span></a>
+</span><span id="AnonyimityVerifier-113"><a href="#AnonyimityVerifier-113"><span class="linenos">113</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="AnonyimityVerifier-114"><a href="#AnonyimityVerifier-114"><span class="linenos">114</span></a>    <span class="k">def</span> <span class="nf">_default_allowed_entities</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier-115"><a href="#AnonyimityVerifier-115"><span class="linenos">115</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ALLOWED_ENTITIES_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
+</span><span id="AnonyimityVerifier-116"><a href="#AnonyimityVerifier-116"><span class="linenos">116</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
+</span><span id="AnonyimityVerifier-117"><a href="#AnonyimityVerifier-117"><span class="linenos">117</span></a>
+</span><span id="AnonyimityVerifier-118"><a href="#AnonyimityVerifier-118"><span class="linenos">118</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="AnonyimityVerifier-119"><a href="#AnonyimityVerifier-119"><span class="linenos">119</span></a>    <span class="k">def</span> <span class="nf">_default_disallowed_words</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier-120"><a href="#AnonyimityVerifier-120"><span class="linenos">120</span></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DISALLOWED_WORDS_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_buffer</span><span class="p">:</span>
+</span><span id="AnonyimityVerifier-121"><a href="#AnonyimityVerifier-121"><span class="linenos">121</span></a>            <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_buffer</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -580,7 +613,11 @@ If None, no model is loaded.</li>
 </span><span id="AnonyimityVerifier.find_any_disallowed-64"><a href="#AnonyimityVerifier.find_any_disallowed-64"><span class="linenos">64</span></a><span class="sd">        Returns:</span>
 </span><span id="AnonyimityVerifier.find_any_disallowed-65"><a href="#AnonyimityVerifier.find_any_disallowed-65"><span class="linenos">65</span></a><span class="sd">            The words that are not allowed.</span>
 </span><span id="AnonyimityVerifier.find_any_disallowed-66"><a href="#AnonyimityVerifier.find_any_disallowed-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnonyimityVerifier.find_any_disallowed-67"><a href="#AnonyimityVerifier.find_any_disallowed-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_disallowed_words</span><span class="p">()</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_named_entities</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier.find_any_disallowed-67"><a href="#AnonyimityVerifier.find_any_disallowed-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="AnonyimityVerifier.find_any_disallowed-68"><a href="#AnonyimityVerifier.find_any_disallowed-68"><span class="linenos">68</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">find_disallowed_words</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier.find_any_disallowed-69"><a href="#AnonyimityVerifier.find_any_disallowed-69"><span class="linenos">69</span></a>            <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_named_entities</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier.find_any_disallowed-70"><a href="#AnonyimityVerifier.find_any_disallowed-70"><span class="linenos">70</span></a>            <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_faulty_conjugations</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier.find_any_disallowed-71"><a href="#AnonyimityVerifier.find_any_disallowed-71"><span class="linenos">71</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -606,17 +643,17 @@ If None, no model is loaded.</li>
 
     </div>
     <a class="headerlink" href="#AnonyimityVerifier.find_disallowed_words"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AnonyimityVerifier.find_disallowed_words-69"><a href="#AnonyimityVerifier.find_disallowed_words-69"><span class="linenos">69</span></a>    <span class="k">def</span> <span class="nf">find_disallowed_words</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnonyimityVerifier.find_disallowed_words-70"><a href="#AnonyimityVerifier.find_disallowed_words-70"><span class="linenos">70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains disallowed words.</span>
-</span><span id="AnonyimityVerifier.find_disallowed_words-71"><a href="#AnonyimityVerifier.find_disallowed_words-71"><span class="linenos">71</span></a>
-</span><span id="AnonyimityVerifier.find_disallowed_words-72"><a href="#AnonyimityVerifier.find_disallowed_words-72"><span class="linenos">72</span></a><span class="sd">        Returns:</span>
-</span><span id="AnonyimityVerifier.find_disallowed_words-73"><a href="#AnonyimityVerifier.find_disallowed_words-73"><span class="linenos">73</span></a><span class="sd">            True if the document contains disallowed words, False otherwise.</span>
-</span><span id="AnonyimityVerifier.find_disallowed_words-74"><a href="#AnonyimityVerifier.find_disallowed_words-74"><span class="linenos">74</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnonyimityVerifier.find_disallowed_words-75"><a href="#AnonyimityVerifier.find_disallowed_words-75"><span class="linenos">75</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="AnonyimityVerifier.find_disallowed_words-76"><a href="#AnonyimityVerifier.find_disallowed_words-76"><span class="linenos">76</span></a>            <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span>
-</span><span id="AnonyimityVerifier.find_disallowed_words-77"><a href="#AnonyimityVerifier.find_disallowed_words-77"><span class="linenos">77</span></a>        <span class="p">}</span>
-</span><span id="AnonyimityVerifier.find_disallowed_words-78"><a href="#AnonyimityVerifier.find_disallowed_words-78"><span class="linenos">78</span></a>
-</span><span id="AnonyimityVerifier.find_disallowed_words-79"><a href="#AnonyimityVerifier.find_disallowed_words-79"><span class="linenos">79</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AnonyimityVerifier.find_disallowed_words-73"><a href="#AnonyimityVerifier.find_disallowed_words-73"><span class="linenos">73</span></a>    <span class="k">def</span> <span class="nf">find_disallowed_words</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-74"><a href="#AnonyimityVerifier.find_disallowed_words-74"><span class="linenos">74</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains disallowed words.</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-75"><a href="#AnonyimityVerifier.find_disallowed_words-75"><span class="linenos">75</span></a>
+</span><span id="AnonyimityVerifier.find_disallowed_words-76"><a href="#AnonyimityVerifier.find_disallowed_words-76"><span class="linenos">76</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-77"><a href="#AnonyimityVerifier.find_disallowed_words-77"><span class="linenos">77</span></a><span class="sd">            True if the document contains disallowed words, False otherwise.</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-78"><a href="#AnonyimityVerifier.find_disallowed_words-78"><span class="linenos">78</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-79"><a href="#AnonyimityVerifier.find_disallowed_words-79"><span class="linenos">79</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-80"><a href="#AnonyimityVerifier.find_disallowed_words-80"><span class="linenos">80</span></a>            <span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">disallowed_words</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-81"><a href="#AnonyimityVerifier.find_disallowed_words-81"><span class="linenos">81</span></a>        <span class="p">}</span>
+</span><span id="AnonyimityVerifier.find_disallowed_words-82"><a href="#AnonyimityVerifier.find_disallowed_words-82"><span class="linenos">82</span></a>
+</span><span id="AnonyimityVerifier.find_disallowed_words-83"><a href="#AnonyimityVerifier.find_disallowed_words-83"><span class="linenos">83</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
 </span></pre></div>
 
 
@@ -626,6 +663,42 @@ If None, no model is loaded.</li>
 
 <blockquote>
   <p>True if the document contains disallowed words, False otherwise.</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div id="AnonyimityVerifier.find_faulty_conjugations" class="classattr">
+                                        <input id="AnonyimityVerifier.find_faulty_conjugations-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">find_faulty_conjugations</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>:</span></span>
+
+                <label class="view-source-button" for="AnonyimityVerifier.find_faulty_conjugations-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#AnonyimityVerifier.find_faulty_conjugations"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AnonyimityVerifier.find_faulty_conjugations-85"><a href="#AnonyimityVerifier.find_faulty_conjugations-85"><span class="linenos">85</span></a>    <span class="k">def</span> <span class="nf">find_faulty_conjugations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier.find_faulty_conjugations-86"><a href="#AnonyimityVerifier.find_faulty_conjugations-86"><span class="linenos">86</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the document contains verbs that are not conjugated properly</span>
+</span><span id="AnonyimityVerifier.find_faulty_conjugations-87"><a href="#AnonyimityVerifier.find_faulty_conjugations-87"><span class="linenos">87</span></a><span class="sd">        for both he/she and they.</span>
+</span><span id="AnonyimityVerifier.find_faulty_conjugations-88"><a href="#AnonyimityVerifier.find_faulty_conjugations-88"><span class="linenos">88</span></a>
+</span><span id="AnonyimityVerifier.find_faulty_conjugations-89"><a href="#AnonyimityVerifier.find_faulty_conjugations-89"><span class="linenos">89</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier.find_faulty_conjugations-90"><a href="#AnonyimityVerifier.find_faulty_conjugations-90"><span class="linenos">90</span></a><span class="sd">            The verbs that are not conjugated properly.</span>
+</span><span id="AnonyimityVerifier.find_faulty_conjugations-91"><a href="#AnonyimityVerifier.find_faulty_conjugations-91"><span class="linenos">91</span></a>
+</span><span id="AnonyimityVerifier.find_faulty_conjugations-92"><a href="#AnonyimityVerifier.find_faulty_conjugations-92"><span class="linenos">92</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier.find_faulty_conjugations-93"><a href="#AnonyimityVerifier.find_faulty_conjugations-93"><span class="linenos">93</span></a>        <span class="n">english_conjugator</span> <span class="o">=</span> <span class="n">conjugations</span><span class="o">.</span><span class="n">CorrectConjugations</span><span class="p">()</span>
+</span><span id="AnonyimityVerifier.find_faulty_conjugations-94"><a href="#AnonyimityVerifier.find_faulty_conjugations-94"><span class="linenos">94</span></a>        <span class="k">return</span> <span class="n">english_conjugator</span><span class="o">.</span><span class="n">find_faulty_conjugation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Check if the document contains verbs that are not conjugated properly
+for both he/she and they.</p>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>The verbs that are not conjugated properly.</p>
 </blockquote>
 </div>
 
@@ -642,22 +715,22 @@ If None, no model is loaded.</li>
 
     </div>
     <a class="headerlink" href="#AnonyimityVerifier.find_named_entities"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AnonyimityVerifier.find_named_entities-81"><a href="#AnonyimityVerifier.find_named_entities-81"><span class="linenos">81</span></a>    <span class="k">def</span> <span class="nf">find_named_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="AnonyimityVerifier.find_named_entities-82"><a href="#AnonyimityVerifier.find_named_entities-82"><span class="linenos">82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find name entities in the document.</span>
-</span><span id="AnonyimityVerifier.find_named_entities-83"><a href="#AnonyimityVerifier.find_named_entities-83"><span class="linenos">83</span></a>
-</span><span id="AnonyimityVerifier.find_named_entities-84"><a href="#AnonyimityVerifier.find_named_entities-84"><span class="linenos">84</span></a><span class="sd">        Returns:</span>
-</span><span id="AnonyimityVerifier.find_named_entities-85"><a href="#AnonyimityVerifier.find_named_entities-85"><span class="linenos">85</span></a><span class="sd">            The detected named entities.</span>
-</span><span id="AnonyimityVerifier.find_named_entities-86"><a href="#AnonyimityVerifier.find_named_entities-86"><span class="linenos">86</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnonyimityVerifier.find_named_entities-87"><a href="#AnonyimityVerifier.find_named_entities-87"><span class="linenos">87</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">:</span>
-</span><span id="AnonyimityVerifier.find_named_entities-88"><a href="#AnonyimityVerifier.find_named_entities-88"><span class="linenos">88</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="AnonyimityVerifier.find_named_entities-89"><a href="#AnonyimityVerifier.find_named_entities-89"><span class="linenos">89</span></a>                <span class="s2">&quot;No spaCy model loaded. Please provide a spaCy model name to the constructor.&quot;</span>
-</span><span id="AnonyimityVerifier.find_named_entities-90"><a href="#AnonyimityVerifier.find_named_entities-90"><span class="linenos">90</span></a>            <span class="p">)</span>
-</span><span id="AnonyimityVerifier.find_named_entities-91"><a href="#AnonyimityVerifier.find_named_entities-91"><span class="linenos">91</span></a>
-</span><span id="AnonyimityVerifier.find_named_entities-92"><a href="#AnonyimityVerifier.find_named_entities-92"><span class="linenos">92</span></a>        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</span><span id="AnonyimityVerifier.find_named_entities-93"><a href="#AnonyimityVerifier.find_named_entities-93"><span class="linenos">93</span></a>        <span class="n">entities</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">}</span>
-</span><span id="AnonyimityVerifier.find_named_entities-94"><a href="#AnonyimityVerifier.find_named_entities-94"><span class="linenos">94</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="n">entities</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span><span class="p">)</span>
-</span><span id="AnonyimityVerifier.find_named_entities-95"><a href="#AnonyimityVerifier.find_named_entities-95"><span class="linenos">95</span></a>
-</span><span id="AnonyimityVerifier.find_named_entities-96"><a href="#AnonyimityVerifier.find_named_entities-96"><span class="linenos">96</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AnonyimityVerifier.find_named_entities-96"><a href="#AnonyimityVerifier.find_named_entities-96"><span class="linenos"> 96</span></a>    <span class="k">def</span> <span class="nf">find_named_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="AnonyimityVerifier.find_named_entities-97"><a href="#AnonyimityVerifier.find_named_entities-97"><span class="linenos"> 97</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Find name entities in the document.</span>
+</span><span id="AnonyimityVerifier.find_named_entities-98"><a href="#AnonyimityVerifier.find_named_entities-98"><span class="linenos"> 98</span></a>
+</span><span id="AnonyimityVerifier.find_named_entities-99"><a href="#AnonyimityVerifier.find_named_entities-99"><span class="linenos"> 99</span></a><span class="sd">        Returns:</span>
+</span><span id="AnonyimityVerifier.find_named_entities-100"><a href="#AnonyimityVerifier.find_named_entities-100"><span class="linenos">100</span></a><span class="sd">            The detected named entities.</span>
+</span><span id="AnonyimityVerifier.find_named_entities-101"><a href="#AnonyimityVerifier.find_named_entities-101"><span class="linenos">101</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnonyimityVerifier.find_named_entities-102"><a href="#AnonyimityVerifier.find_named_entities-102"><span class="linenos">102</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">:</span>
+</span><span id="AnonyimityVerifier.find_named_entities-103"><a href="#AnonyimityVerifier.find_named_entities-103"><span class="linenos">103</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="AnonyimityVerifier.find_named_entities-104"><a href="#AnonyimityVerifier.find_named_entities-104"><span class="linenos">104</span></a>                <span class="s2">&quot;No spaCy model loaded. Please provide a spaCy model name to the constructor.&quot;</span>
+</span><span id="AnonyimityVerifier.find_named_entities-105"><a href="#AnonyimityVerifier.find_named_entities-105"><span class="linenos">105</span></a>            <span class="p">)</span>
+</span><span id="AnonyimityVerifier.find_named_entities-106"><a href="#AnonyimityVerifier.find_named_entities-106"><span class="linenos">106</span></a>
+</span><span id="AnonyimityVerifier.find_named_entities-107"><a href="#AnonyimityVerifier.find_named_entities-107"><span class="linenos">107</span></a>        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_recognition_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span><span id="AnonyimityVerifier.find_named_entities-108"><a href="#AnonyimityVerifier.find_named_entities-108"><span class="linenos">108</span></a>        <span class="n">entities</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">}</span>
+</span><span id="AnonyimityVerifier.find_named_entities-109"><a href="#AnonyimityVerifier.find_named_entities-109"><span class="linenos">109</span></a>        <span class="n">disallowed</span> <span class="o">=</span> <span class="n">entities</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">allowed_entities</span><span class="p">)</span>
+</span><span id="AnonyimityVerifier.find_named_entities-110"><a href="#AnonyimityVerifier.find_named_entities-110"><span class="linenos">110</span></a>
+</span><span id="AnonyimityVerifier.find_named_entities-111"><a href="#AnonyimityVerifier.find_named_entities-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="n">disallowed</span>
 </span></pre></div>
 
 
@@ -684,38 +757,38 @@ If None, no model is loaded.</li>
 
     </div>
     <a class="headerlink" href="#WordDocument"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="WordDocument-109"><a href="#WordDocument-109"><span class="linenos">109</span></a><span class="k">class</span> <span class="nc">WordDocument</span><span class="p">(</span><span class="n">AnonyimityVerifier</span><span class="p">):</span>
-</span><span id="WordDocument-110"><a href="#WordDocument-110"><span class="linenos">110</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a Word document that can be used to verify the anonymity of its contents.</span>
-</span><span id="WordDocument-111"><a href="#WordDocument-111"><span class="linenos">111</span></a><span class="sd">    Inherits from `AnonyimityVerifier`.</span>
-</span><span id="WordDocument-112"><a href="#WordDocument-112"><span class="linenos">112</span></a>
-</span><span id="WordDocument-113"><a href="#WordDocument-113"><span class="linenos">113</span></a><span class="sd">    Args:</span>
-</span><span id="WordDocument-114"><a href="#WordDocument-114"><span class="linenos">114</span></a><span class="sd">        filename: The path to the Word document file.</span>
-</span><span id="WordDocument-115"><a href="#WordDocument-115"><span class="linenos">115</span></a>
-</span><span id="WordDocument-116"><a href="#WordDocument-116"><span class="linenos">116</span></a><span class="sd">    Attributes:</span>
-</span><span id="WordDocument-117"><a href="#WordDocument-117"><span class="linenos">117</span></a><span class="sd">        filename: The path to the Word document file.</span>
-</span><span id="WordDocument-118"><a href="#WordDocument-118"><span class="linenos">118</span></a><span class="sd">        document: The Word document object.</span>
-</span><span id="WordDocument-119"><a href="#WordDocument-119"><span class="linenos">119</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="WordDocument-120"><a href="#WordDocument-120"><span class="linenos">120</span></a>
-</span><span id="WordDocument-121"><a href="#WordDocument-121"><span class="linenos">121</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-</span><span id="WordDocument-122"><a href="#WordDocument-122"><span class="linenos">122</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="WordDocument-123"><a href="#WordDocument-123"><span class="linenos">123</span></a>        <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
-</span><span id="WordDocument-124"><a href="#WordDocument-124"><span class="linenos">124</span></a>        <span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">SPACY_MODEL</span><span class="p">,</span>
-</span><span id="WordDocument-125"><a href="#WordDocument-125"><span class="linenos">125</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="WordDocument-126"><a href="#WordDocument-126"><span class="linenos">126</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the WordDocument object.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WordDocument-124"><a href="#WordDocument-124"><span class="linenos">124</span></a><span class="k">class</span> <span class="nc">WordDocument</span><span class="p">(</span><span class="n">AnonyimityVerifier</span><span class="p">):</span>
+</span><span id="WordDocument-125"><a href="#WordDocument-125"><span class="linenos">125</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a Word document that can be used to verify the anonymity of its contents.</span>
+</span><span id="WordDocument-126"><a href="#WordDocument-126"><span class="linenos">126</span></a><span class="sd">    Inherits from `AnonyimityVerifier`.</span>
 </span><span id="WordDocument-127"><a href="#WordDocument-127"><span class="linenos">127</span></a>
-</span><span id="WordDocument-128"><a href="#WordDocument-128"><span class="linenos">128</span></a><span class="sd">        Args:</span>
-</span><span id="WordDocument-129"><a href="#WordDocument-129"><span class="linenos">129</span></a><span class="sd">            filename: The path to the Word document file.</span>
+</span><span id="WordDocument-128"><a href="#WordDocument-128"><span class="linenos">128</span></a><span class="sd">    Args:</span>
+</span><span id="WordDocument-129"><a href="#WordDocument-129"><span class="linenos">129</span></a><span class="sd">        filename: The path to the Word document file.</span>
 </span><span id="WordDocument-130"><a href="#WordDocument-130"><span class="linenos">130</span></a>
-</span><span id="WordDocument-131"><a href="#WordDocument-131"><span class="linenos">131</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="WordDocument-132"><a href="#WordDocument-132"><span class="linenos">132</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="WordDocument-133"><a href="#WordDocument-133"><span class="linenos">133</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">docx</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
-</span><span id="WordDocument-134"><a href="#WordDocument-134"><span class="linenos">134</span></a>        <span class="n">paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="WordDocument-135"><a href="#WordDocument-135"><span class="linenos">135</span></a>        <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">paragraphs</span><span class="p">:</span>
-</span><span id="WordDocument-136"><a href="#WordDocument-136"><span class="linenos">136</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">paragraph</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="WordDocument-137"><a href="#WordDocument-137"><span class="linenos">137</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="p">)</span>
-</span><span id="WordDocument-138"><a href="#WordDocument-138"><span class="linenos">138</span></a>            <span class="k">else</span><span class="p">:</span>
-</span><span id="WordDocument-139"><a href="#WordDocument-139"><span class="linenos">139</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</span><span id="WordDocument-140"><a href="#WordDocument-140"><span class="linenos">140</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">paragraphs</span><span class="p">,</span> <span class="n">entity_recognition_model</span><span class="o">=</span><span class="n">entity_recognition_model</span><span class="p">)</span>
+</span><span id="WordDocument-131"><a href="#WordDocument-131"><span class="linenos">131</span></a><span class="sd">    Attributes:</span>
+</span><span id="WordDocument-132"><a href="#WordDocument-132"><span class="linenos">132</span></a><span class="sd">        filename: The path to the Word document file.</span>
+</span><span id="WordDocument-133"><a href="#WordDocument-133"><span class="linenos">133</span></a><span class="sd">        document: The Word document object.</span>
+</span><span id="WordDocument-134"><a href="#WordDocument-134"><span class="linenos">134</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="WordDocument-135"><a href="#WordDocument-135"><span class="linenos">135</span></a>
+</span><span id="WordDocument-136"><a href="#WordDocument-136"><span class="linenos">136</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="WordDocument-137"><a href="#WordDocument-137"><span class="linenos">137</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="WordDocument-138"><a href="#WordDocument-138"><span class="linenos">138</span></a>        <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+</span><span id="WordDocument-139"><a href="#WordDocument-139"><span class="linenos">139</span></a>        <span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">SPACY_MODEL</span><span class="p">,</span>
+</span><span id="WordDocument-140"><a href="#WordDocument-140"><span class="linenos">140</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="WordDocument-141"><a href="#WordDocument-141"><span class="linenos">141</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the WordDocument object.</span>
+</span><span id="WordDocument-142"><a href="#WordDocument-142"><span class="linenos">142</span></a>
+</span><span id="WordDocument-143"><a href="#WordDocument-143"><span class="linenos">143</span></a><span class="sd">        Args:</span>
+</span><span id="WordDocument-144"><a href="#WordDocument-144"><span class="linenos">144</span></a><span class="sd">            filename: The path to the Word document file.</span>
+</span><span id="WordDocument-145"><a href="#WordDocument-145"><span class="linenos">145</span></a>
+</span><span id="WordDocument-146"><a href="#WordDocument-146"><span class="linenos">146</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="WordDocument-147"><a href="#WordDocument-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="WordDocument-148"><a href="#WordDocument-148"><span class="linenos">148</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">docx</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+</span><span id="WordDocument-149"><a href="#WordDocument-149"><span class="linenos">149</span></a>        <span class="n">paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="WordDocument-150"><a href="#WordDocument-150"><span class="linenos">150</span></a>        <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">paragraphs</span><span class="p">:</span>
+</span><span id="WordDocument-151"><a href="#WordDocument-151"><span class="linenos">151</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">paragraph</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="WordDocument-152"><a href="#WordDocument-152"><span class="linenos">152</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="p">)</span>
+</span><span id="WordDocument-153"><a href="#WordDocument-153"><span class="linenos">153</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="WordDocument-154"><a href="#WordDocument-154"><span class="linenos">154</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span><span id="WordDocument-155"><a href="#WordDocument-155"><span class="linenos">155</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">paragraphs</span><span class="p">,</span> <span class="n">entity_recognition_model</span><span class="o">=</span><span class="n">entity_recognition_model</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -747,26 +820,26 @@ Inherits from <code><a href="#AnonyimityVerifier">AnonyimityVerifier</a></code>.
 
     </div>
     <a class="headerlink" href="#WordDocument.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="WordDocument.__init__-121"><a href="#WordDocument.__init__-121"><span class="linenos">121</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-</span><span id="WordDocument.__init__-122"><a href="#WordDocument.__init__-122"><span class="linenos">122</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="WordDocument.__init__-123"><a href="#WordDocument.__init__-123"><span class="linenos">123</span></a>        <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
-</span><span id="WordDocument.__init__-124"><a href="#WordDocument.__init__-124"><span class="linenos">124</span></a>        <span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">SPACY_MODEL</span><span class="p">,</span>
-</span><span id="WordDocument.__init__-125"><a href="#WordDocument.__init__-125"><span class="linenos">125</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="WordDocument.__init__-126"><a href="#WordDocument.__init__-126"><span class="linenos">126</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the WordDocument object.</span>
-</span><span id="WordDocument.__init__-127"><a href="#WordDocument.__init__-127"><span class="linenos">127</span></a>
-</span><span id="WordDocument.__init__-128"><a href="#WordDocument.__init__-128"><span class="linenos">128</span></a><span class="sd">        Args:</span>
-</span><span id="WordDocument.__init__-129"><a href="#WordDocument.__init__-129"><span class="linenos">129</span></a><span class="sd">            filename: The path to the Word document file.</span>
-</span><span id="WordDocument.__init__-130"><a href="#WordDocument.__init__-130"><span class="linenos">130</span></a>
-</span><span id="WordDocument.__init__-131"><a href="#WordDocument.__init__-131"><span class="linenos">131</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="WordDocument.__init__-132"><a href="#WordDocument.__init__-132"><span class="linenos">132</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="WordDocument.__init__-133"><a href="#WordDocument.__init__-133"><span class="linenos">133</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">docx</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
-</span><span id="WordDocument.__init__-134"><a href="#WordDocument.__init__-134"><span class="linenos">134</span></a>        <span class="n">paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="WordDocument.__init__-135"><a href="#WordDocument.__init__-135"><span class="linenos">135</span></a>        <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">paragraphs</span><span class="p">:</span>
-</span><span id="WordDocument.__init__-136"><a href="#WordDocument.__init__-136"><span class="linenos">136</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">paragraph</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="WordDocument.__init__-137"><a href="#WordDocument.__init__-137"><span class="linenos">137</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="p">)</span>
-</span><span id="WordDocument.__init__-138"><a href="#WordDocument.__init__-138"><span class="linenos">138</span></a>            <span class="k">else</span><span class="p">:</span>
-</span><span id="WordDocument.__init__-139"><a href="#WordDocument.__init__-139"><span class="linenos">139</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</span><span id="WordDocument.__init__-140"><a href="#WordDocument.__init__-140"><span class="linenos">140</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">paragraphs</span><span class="p">,</span> <span class="n">entity_recognition_model</span><span class="o">=</span><span class="n">entity_recognition_model</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WordDocument.__init__-136"><a href="#WordDocument.__init__-136"><span class="linenos">136</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="WordDocument.__init__-137"><a href="#WordDocument.__init__-137"><span class="linenos">137</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="WordDocument.__init__-138"><a href="#WordDocument.__init__-138"><span class="linenos">138</span></a>        <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+</span><span id="WordDocument.__init__-139"><a href="#WordDocument.__init__-139"><span class="linenos">139</span></a>        <span class="n">entity_recognition_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">SPACY_MODEL</span><span class="p">,</span>
+</span><span id="WordDocument.__init__-140"><a href="#WordDocument.__init__-140"><span class="linenos">140</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="WordDocument.__init__-141"><a href="#WordDocument.__init__-141"><span class="linenos">141</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the WordDocument object.</span>
+</span><span id="WordDocument.__init__-142"><a href="#WordDocument.__init__-142"><span class="linenos">142</span></a>
+</span><span id="WordDocument.__init__-143"><a href="#WordDocument.__init__-143"><span class="linenos">143</span></a><span class="sd">        Args:</span>
+</span><span id="WordDocument.__init__-144"><a href="#WordDocument.__init__-144"><span class="linenos">144</span></a><span class="sd">            filename: The path to the Word document file.</span>
+</span><span id="WordDocument.__init__-145"><a href="#WordDocument.__init__-145"><span class="linenos">145</span></a>
+</span><span id="WordDocument.__init__-146"><a href="#WordDocument.__init__-146"><span class="linenos">146</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="WordDocument.__init__-147"><a href="#WordDocument.__init__-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="WordDocument.__init__-148"><a href="#WordDocument.__init__-148"><span class="linenos">148</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">docx</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+</span><span id="WordDocument.__init__-149"><a href="#WordDocument.__init__-149"><span class="linenos">149</span></a>        <span class="n">paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="WordDocument.__init__-150"><a href="#WordDocument.__init__-150"><span class="linenos">150</span></a>        <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">paragraphs</span><span class="p">:</span>
+</span><span id="WordDocument.__init__-151"><a href="#WordDocument.__init__-151"><span class="linenos">151</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">paragraph</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="WordDocument.__init__-152"><a href="#WordDocument.__init__-152"><span class="linenos">152</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="p">)</span>
+</span><span id="WordDocument.__init__-153"><a href="#WordDocument.__init__-153"><span class="linenos">153</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="WordDocument.__init__-154"><a href="#WordDocument.__init__-154"><span class="linenos">154</span></a>                <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paragraph</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span><span id="WordDocument.__init__-155"><a href="#WordDocument.__init__-155"><span class="linenos">155</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">paragraphs</span><span class="p">,</span> <span class="n">entity_recognition_model</span><span class="o">=</span><span class="n">entity_recognition_model</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -813,6 +886,7 @@ Inherits from <code><a href="#AnonyimityVerifier">AnonyimityVerifier</a></code>.
                 <dd id="WordDocument.disallowed_words" class="variable"><a href="#AnonyimityVerifier.disallowed_words">disallowed_words</a></dd>
                 <dd id="WordDocument.find_any_disallowed" class="function"><a href="#AnonyimityVerifier.find_any_disallowed">find_any_disallowed</a></dd>
                 <dd id="WordDocument.find_disallowed_words" class="function"><a href="#AnonyimityVerifier.find_disallowed_words">find_disallowed_words</a></dd>
+                <dd id="WordDocument.find_faulty_conjugations" class="function"><a href="#AnonyimityVerifier.find_faulty_conjugations">find_faulty_conjugations</a></dd>
                 <dd id="WordDocument.find_named_entities" class="function"><a href="#AnonyimityVerifier.find_named_entities">find_named_entities</a></dd>
 
             </div>
