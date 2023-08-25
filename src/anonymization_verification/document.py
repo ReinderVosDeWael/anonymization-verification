@@ -9,7 +9,7 @@ from typing import Iterable
 import docx
 import spacy
 
-from anonymization_verification import config
+from anonymization_verification import config, conjugations
 
 settings = config.get_settings()
 SPACY_MODEL = settings.spacy_model
@@ -76,6 +76,17 @@ class AnonyimityVerifier:
         }
 
         return disallowed
+
+    def find_faulty_conjugations(self) -> set[str]:
+        """Check if the document contains verbs that are not conjugated properly
+        for both he/she and they.
+
+        Returns:
+            The verbs that are not conjugated properly.
+
+        """
+        english_conjugator = conjugations.CorrectConjugations()
+        return english_conjugator.find_faulty_conjugation(self.text)
 
     def find_named_entities(self) -> set[str]:
         """Find name entities in the document.

@@ -44,7 +44,9 @@ def test_check_disallowed_words(word_document: str, expected: set[str]) -> None:
     """Test the check_disallowed_words method."""
     doc = document.WordDocument(word_document, None)
 
-    assert doc.find_disallowed_words() == expected
+    actual = doc.find_disallowed_words()
+
+    assert actual == expected
 
 
 @pytest.mark.parametrize(
@@ -61,4 +63,23 @@ def test_check_named_entities(word_document: str, expected: set[str]) -> None:
     """Test the check_named_entities method."""
     doc = document.WordDocument(word_document, "en_core_web_sm")
 
-    assert doc.find_named_entities() == expected
+    actual = doc.find_named_entities()
+
+    assert actual == expected
+
+
+@pytest.mark.parametrize(
+    "word_text, expected",
+    [
+        [["He/she/tHey is/are a test."], set()],
+        [["He/she/tHey is a test."], set(["He/she/tHey is"])],
+        [["tHey is a test."], set(["tHey is"])],
+    ],
+)
+def test_check_conjugations(word_document: str, expected: set[str]) -> None:
+    """Test the check_conjugations method."""
+    doc = document.WordDocument(word_document, None)
+
+    actual = doc.find_faulty_conjugations()
+
+    assert actual == expected
