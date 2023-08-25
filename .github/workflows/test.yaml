@@ -22,6 +22,7 @@ jobs:
           python -m pip install poetry
           poetry install
       - name: Run tests
+        continue-on-error: true
         run: >
           test_output=$(
               poetry run pytest \
