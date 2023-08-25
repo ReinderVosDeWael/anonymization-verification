@@ -30,6 +30,7 @@ jobs:
             --cov-report=xml:coverage.xml \
             --cov=src tests \
             > ./pytest-coverage.txt;
+          cat ./pytest-coverage.txt;
       - name: Upload pytest coverage artifacts.
         uses: actions/upload-artifact@v2
         with:
