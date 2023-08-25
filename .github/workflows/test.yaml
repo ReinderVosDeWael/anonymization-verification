@@ -23,6 +23,7 @@ jobs:
 
   coverage:
     runs-on: ubuntu-latest
+    if: always()
     needs: unit
     permissions:
       contents: read
