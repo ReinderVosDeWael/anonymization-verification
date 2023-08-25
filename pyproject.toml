@@ -26,6 +26,9 @@ pdoc = "^14.0.0"
 [tool.poetry.extras]
 docs = ["pdoc"]
 
+[tool.poetry.scripts]
+anonymization_verification = "anonymization_verification:__main__"
+
 [build-system]
 requires = ["poetry-core>=1.2.0"]
 build-backend = "poetry.core.masonry.api"

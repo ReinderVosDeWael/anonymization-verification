@@ -25,7 +25,7 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
-class AnoynimityVerifier:
+class AnonyimityVerifier:
     """Class for verifying anonymity of (an iterable of) string(s).
 
     Attributes:
@@ -57,7 +57,7 @@ class AnoynimityVerifier:
         self.allowed_entities = allowed_entities or self._default_allowed_entities()
         self.disallowed_words = disallowed_words or self._default_disallowed_words()
 
-    def contains_any_disallowed(self) -> set[str]:
+    def find_any_disallowed(self) -> set[str]:
         """Check if the document passes all checks.
 
         Returns:
@@ -105,9 +105,9 @@ class AnoynimityVerifier:
             return set(json.load(file_buffer))
 
 
-class WordDocument(AnoynimityVerifier):
+class WordDocument(AnonyimityVerifier):
     """A class representing a Word document that can be used to verify the anonymity of its contents.
-    Inherits from `AnoynimityVerifier`.
+    Inherits from `AnonyimityVerifier`.
 
     Args:
         filename: The path to the Word document file.
