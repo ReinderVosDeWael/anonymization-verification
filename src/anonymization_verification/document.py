@@ -63,7 +63,11 @@ class AnonyimityVerifier:
         Returns:
             The words that are not allowed.
         """
-        return self.find_disallowed_words() | self.find_named_entities()
+        return (
+            self.find_disallowed_words()
+            | self.find_named_entities()
+            | self.find_faulty_conjugations()
+        )
 
     def find_disallowed_words(self) -> set[str]:
         """Check if the document contains disallowed words.
