@@ -88,7 +88,7 @@ class CorrectConjugations:
 
         """
         sentences = self._split_by_sentences(text)
-        faulty_conjugations = []
+        faulty_conjugations = set()
         for sentence in sentences:
             subject_verb = self._detect_subject_and_verb(sentence)
             for sub_verbs in subject_verb:
@@ -106,12 +106,13 @@ class CorrectConjugations:
                     ]
 
                     if not any(
-                        any([phrase in verb for verb in verb_conjugators])
+                        phrase in verb  # type: ignore[operator]
+                        for verb in verb_conjugators
                         for phrase in phrases
                     ):
-                        faulty_conjugations.append(sub_verbs.phrase)
+                        faulty_conjugations.add(sub_verbs.phrase)
                         break
-        return set(faulty_conjugations)
+        return faulty_conjugations
 
     @staticmethod
     def _detect_subject_and_verb(sentence: str) -> list[SubjectVerbPair]:
